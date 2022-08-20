@@ -1,22 +1,6 @@
 import { useEffect, useState } from "react";
 import styles from './BubbleSort.module.scss';
-
-declare global {
-  interface Array<T> {
-    isSorted(): boolean;
-  }
-}
-
-Array.prototype.isSorted = function (): boolean {
-  const arr: number[] = this;
-  for (let i = 0; i < arr.length; i++) {
-    if (arr[i] > arr[i + 1]) {
-      return false;
-    }
-  }
-  return true;
-}
-
+import Array from "../../features/arrray-proto";
 
 const BubbleSort = () => {
   const [array, setArray] = useState<number[]>([]);
@@ -38,7 +22,6 @@ const BubbleSort = () => {
   }
 
   const waitOneSecond = async () => {
-
     await new Promise(resolve => setTimeout(resolve, 200));
   }
 
