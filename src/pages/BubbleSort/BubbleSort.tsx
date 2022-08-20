@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import styles from './BubbleSort.module.scss';
-import { Flipper, Flipped } from "react-flip-toolkit";
 
 declare global {
   interface Array<T> {
@@ -9,15 +8,12 @@ declare global {
 }
 
 Array.prototype.isSorted = function (): boolean {
-  const startTime = performance.now();
   const arr: number[] = this;
   for (let i = 0; i < arr.length; i++) {
     if (arr[i] > arr[i + 1]) {
       return false;
     }
   }
-  const endTime = performance.now();
-  // console.log("Call to isSorted took " + (endTime - startTime) + " milliseconds.");
   return true;
 }
 
@@ -25,7 +21,6 @@ Array.prototype.isSorted = function (): boolean {
 const BubbleSort = () => {
   const [array, setArray] = useState<number[]>([]);
   const [isSorting, setIsSorting] = useState<boolean>(false);
-  // const [t]
 
   useEffect(() => {
     runSort();
@@ -75,20 +70,17 @@ const BubbleSort = () => {
   }
 
   return (
-    <Flipper flipKey={array.join("")}>
       <div className={styles.container}>
         <div className={styles.illustration}>
           {array.length <= 40 ? array.map((item, index) =>
-            <Flipped key={index} flipId={index}>
               <div key={index} className={styles.arrayItem} style={{ width: 100 / array.length + '%', height: 1 * item + '%' }}>
                 <div
                   className={styles.rectangle}>
                 </div>{item}
               </div>
-            </Flipped>) : null}
+            ) : null}
         </div>
       </div>
-    </Flipper>
   );
 };
 
