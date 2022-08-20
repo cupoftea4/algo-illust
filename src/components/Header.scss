@@ -1,0 +1,36 @@
+@import '../variables.scss';
+
+header {
+    display: flex;
+    gap: 1rem;
+    list-style: none;
+    color: $secondary-clr;
+    text-decoration: none;
+    padding: 2rem;
+}
+    
+header > a {
+    cursor: pointer;
+    color: $primary-clr;
+    text-decoration: none;
+    padding: .5rem 1rem;
+    
+}
+
+@media screen and (max-width: 620px) {
+    header {
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 0rem;
+        > a {
+            padding: .2rem;
+        }
+    }
+}
+
+.selected {
+    background-color: $primary-clr;
+    color: $secondary-clr;
+    border-radius: .25rem;
+}

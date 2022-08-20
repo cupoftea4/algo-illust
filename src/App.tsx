@@ -1,25 +1,30 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import Home from './pages/Home';
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import BubbleSort from './pages/BubbleSort/BubbleSort';
+import SelectionSort from './pages/SelectionSort/SelectionSort';
+import Header from './components/Header';
+import MergeSort from './pages/MergeSort/MergeSort';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Home/>} >
+            <Route path="bubble" element={<BubbleSort/>} />
+            <Route path="selection" element={<SelectionSort/>} />
+            <Route path="merge" element={<MergeSort/>} />
+            <Route path="#" element={<BubbleSort/>} />
+            <Route path="#" element={<BubbleSort/>} />
+            <Route path="#" element={<BubbleSort/>} />
+          </Route>
+          <Route path="*" element={<Home/>} />
+        </Routes>      
+      </BrowserRouter>
+
+    </>
   );
 }
 
