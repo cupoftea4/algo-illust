@@ -1,17 +1,16 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
+import { SortTypeId } from "../types";
 import './Header.scss';
 
-type SortTypeId = 'bubble' | 'selection' | 'shell' | 'quick' | 'merge' | 'counting' | null;
 
 type SortType = {
   id: SortTypeId;
   name: string;
 }
 
-const Header = () => {
-  let style = "";
-  const [type, setType] = React.useState<SortTypeId>(null);
+const Header = ({type, setType}: {type: SortTypeId, setType: (id: SortTypeId) => void}) => {
+
   const sorts: SortType[] = [
     {id: 'bubble', name: 'Bubble Sort'},
     {id: 'selection', name: 'Selection Sort'},
