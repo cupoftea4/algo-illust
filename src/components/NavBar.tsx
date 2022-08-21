@@ -1,15 +1,13 @@
-import React from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { SortTypeId } from "../types";
-import './Header.scss';
-
+import './NavBar.scss';
 
 type SortType = {
   id: SortTypeId;
   name: string;
 }
 
-const Header = ({type, setType}: {type: SortTypeId, setType: (id: SortTypeId) => void}) => {
+const NavBar = ({type, setType}: {type: SortTypeId, setType: (id: SortTypeId) => void}) => {
 
   const sorts: SortType[] = [
     {id: 'bubble', name: 'Bubble Sort'},
@@ -21,7 +19,7 @@ const Header = ({type, setType}: {type: SortTypeId, setType: (id: SortTypeId) =>
   ];
 
   return (
-    <header>
+    <nav>
       {sorts.map(sort => (
         <Link
           key={sort.id}
@@ -31,8 +29,8 @@ const Header = ({type, setType}: {type: SortTypeId, setType: (id: SortTypeId) =>
           {sort.name}
         </Link>
       ))}
-    </header>
+    </nav>
   );
 };
 
-export default Header;
+export default NavBar;

@@ -1,6 +1,6 @@
 @import '../variables.scss';
 
-header {
+nav {
     display: flex;
     gap: 1rem;
     list-style: none;
@@ -9,7 +9,7 @@ header {
     padding: 2rem;
 }
     
-header > a {
+nav > a {
     cursor: pointer;
     color: $primary-clr;
     text-decoration: none;
