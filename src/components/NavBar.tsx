@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { SortTypeId } from "../types";
-import './NavBar.scss';
+import styles from './NavBar.module.scss';
 
 type SortType = {
   id: SortTypeId;
@@ -24,7 +24,7 @@ const NavBar = ({type, setType}: {type: SortTypeId, setType: (id: SortTypeId) =>
         <Link
           key={sort.id}
           to={'/' + sort.id}
-          className={`${type === sort.id && 'selected'}`}
+          className={`${type === sort.id && styles.selected}`}
           onClick={() => setType(sort.id)}>
           {sort.name}
         </Link>

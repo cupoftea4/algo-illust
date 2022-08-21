@@ -1,14 +1,25 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import styles from './BubbleSort.module.scss';
-import Array from "../../features/arrray-proto";
+import Array from "../../features/array-proto";
+import { useOutletContext } from "react-router-dom";
+import Graph from "../../components/Graph";
 
 const BubbleSort = () => {
   const [array, setArray] = useState<number[]>([]);
   const [isSorting, setIsSorting] = useState<boolean>(false);
+  const arrayLength : number = useOutletContext();
 
   useEffect(() => {
     runSort();
-  }, [])
+  }, []);
+
+  useEffect(() => {
+    if (isSorting) {
+      alert("Wait for the sorting to finish");
+    } else {
+      runSort();
+    }
+  }, [arrayLength]);
 
   useEffect(() => {
     if (!isSorting && array.length > 0 && !array.isSorted()) {
@@ -17,11 +28,11 @@ const BubbleSort = () => {
   }, [array])
 
   const runSort = () => {
-    const length = parseInt(prompt("Enter length of array") || "10");
+    const length = arrayLength;
     setArray(Array.from({ length }, () => Math.floor(Math.random() * 100)));
   }
 
-  const waitOneSecond = async () => {
+  const wait = async () => {
     await new Promise(resolve => setTimeout(resolve, 200));
   }
 
@@ -29,7 +40,7 @@ const BubbleSort = () => {
     setIsSorting(true);
     return new Promise(async (resolve) => {
       const startTime = performance.now();
-      let arr = array;
+      const arr = array;
       const len = arr.length;
       if (len > 40) {
         alert("Array is too large to sort. Please try a smaller array.");
@@ -39,7 +50,7 @@ const BubbleSort = () => {
         for (let j = 0; j < len; j++) {
           if (arr[j] > arr[j + 1]) {
             [arr[j], arr[j + 1]] = [arr[j + 1], arr[j]];
-            await waitOneSecond();
+            await wait();
             setArray([...arr]);
           }
         }
@@ -54,15 +65,7 @@ const BubbleSort = () => {
 
   return (
       <div className={styles.container}>
-        <div className={styles.illustration}>
-          {array.length <= 40 ? array.map((item, index) =>
-              <div key={index} className={styles.arrayItem} style={{ width: 100 / array.length + '%', height: 1 * item + '%' }}>
-                <div
-                  className={styles.rectangle}>
-                </div>{item}
-              </div>
-            ) : null}
-        </div>
+        <Graph array={array} />
       </div>
   );
 };

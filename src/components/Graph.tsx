@@ -1,16 +1,16 @@
-import React from 'react'
+import styles from './Graph.module.scss';
 
-const Graph = ({array, styles} : {array: number[], styles: any}) => {
+const Graph = ({array} : {array: number[]}) => {
   return (
-    <>
-    {array.length <= 40 ? array.map((item, index) =>
+    <div className={styles.illustration}>
+      {array.length <= 40 ? array.map((item, index) =>
         <div key={index} className={styles.arrayItem} style={{ width: 100 / array.length + '%', height: 1 * item + '%' }}>
           <div
             className={styles.rectangle}>
           </div>{item}
         </div>
       ) : null}
-    </>
+    </div>
   )
 }
 
