@@ -8,13 +8,12 @@ type SortType = {
 }
 
 const NavBar = ({type, setType}: {type: SortTypeId, setType: (id: SortTypeId) => void}) => {
-
   const sorts: SortType[] = [
     {id: 'bubble', name: 'Bubble Sort'},
     {id: 'selection', name: 'Selection Sort'},
     {id: 'shell', name: 'Shell Sort'},
-    {id: 'quick', name: 'Quick Sort'},
     {id: 'merge', name: 'Merge Sort'},
+    {id: 'quick', name: 'Quick Sort'},
     {id: 'counting', name: 'Counting Sort'}
   ];
 

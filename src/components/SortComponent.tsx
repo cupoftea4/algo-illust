@@ -20,55 +20,54 @@ Array.prototype.isSorted = function (): boolean {
   return true;
 }
 
+type OutletContextType = [Array<number>, (array: number[]) => void, () => Promise<void>]
+
 const SortComponent = (sort: Function) => {
     const Component = function() {
         const [isSorting, setIsSorting] = useState<boolean>(false);
-        const [array, setArray] : [Array<number>, (array: number[]) => void] = useOutletContext();
-      
+        const [timeTaken, setTimeTaken] = useState<number>(0);
+        const [swappingElements, setSwappingElements] = useState<number[]>([1, 2]);
+        const [array, setArray, waitDelay]: OutletContextType = useOutletContext();
+        
         useEffect(() => {
-          if (!isSorting && array.length > 0 && !array.isSorted()) {
-            bubbleSort();
-          } else if (array.length > 0) {
-            alert("Wait for the sorting to finish");
+          console.log(array.length); 
+          if (array.length > 0 && !array.isSorted()) {
+            if (isSorting) {
+              alert("Wait for the sorting to finish");
+            } else {
+              bubbleSort();
+            }
           }
+          // eslint-disable-next-line react-hooks/exhaustive-deps
         }, [array.length]) 
-      
-        const waitOneSecond = async () => {
-          await new Promise(resolve => setTimeout(resolve, 200));
+
+        const renderSwap = (arr: number[], toSwap: number[]) => {
+          setArray(arr);
+          setSwappingElements(toSwap);
         }
       
         const bubbleSort = (): Promise<number[]> | undefined => {
-          if (array.length > 40) {
-            alert("Array is too large to sort. Please try a smaller array.");
-            return;
-          }
           setIsSorting(true);
           return new Promise(async (resolve) => {
-            console.warn("bubbleSort started");
             const startTime = performance.now();
-            const arr = array;
-            const len = arr.length;
-            for (let i = 0; i < len; i++) {
-              for (let j = 0; j < len; j++) {
-                if (arr[j] > arr[j + 1]) {
-                  [arr[j], arr[j + 1]] = [arr[j + 1], arr[j]];
-                  await waitOneSecond();
-                  setArray([...arr]);
-                }
-              }
-            }
-            const endTime = performance.now();
-            console.log("Call to bubbleSort took " + (endTime - startTime) + " milliseconds.");
-            setArray([...arr]);
+            const sortedArray = await sort(array, renderSwap, waitDelay);
+            const sortTime = performance.now() - startTime;
+            setTimeTaken(Math.round(sortTime * 100) / 100);
+            setArray([...sortedArray]);
+            setSwappingElements([-1]);
             setIsSorting(false);
-            resolve(arr);
+            resolve(sortedArray);
           });
         }
 
         return (
+          <>
             <div className={styles.container}>
-              <Graph array={array} />
+              <Graph array={array} swaps={swappingElements}/>
             </div>
+            <span className={styles.time}>Time taken {timeTaken}ms.</span>
+          </>
+
         );
     }
     return Component;

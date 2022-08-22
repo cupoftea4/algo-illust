@@ -18,13 +18,32 @@ nav > a {
 }
 
 @media screen and (max-width: 620px) {
-    header {
+    nav {
         flex-direction: column;
         align-items: center;
         justify-content: center;
         gap: 0rem;
         > a {
             padding: .2rem;
+
+            &:before{
+                content: '';
+                position: absolute;
+                width: 4rem;
+                height: 1rem;
+                bottom: 0;
+                left: 0;
+                background-color: #9CF5A6;
+                border-radius: .3rem;
+                // visibility: hidden;
+                // transform: scaleX(0);
+                // transition: .25s linear;
+            }
+            &:hover:before,
+            &:focus:before {
+            visibility: visible;
+            transform: scaleX(1);
+}
         }
     }
 }

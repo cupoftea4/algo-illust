@@ -23,6 +23,9 @@
             &:hover {
                 background-color: $dark-primary-clr;
             }
+            &.swapping {
+                background-color: $active-clr;
+            }
         }
     }
 }
