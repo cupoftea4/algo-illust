@@ -23,8 +23,10 @@ const NavBar = ({type, setType}: {type: SortTypeId, setType: (id: SortTypeId) =>
         <Link
           key={sort.id}
           to={'/' + sort.id}
-          className={`${type === sort.id && styles.selected}`}
-          onClick={() => setType(sort.id)}>
+          className={`${type === sort.id && styles.textSelected}`}
+          onClick={() => setType(sort.id)}
+        >
+          <div className={`${type === sort.id && styles.selected}`}></div>
           {sort.name}
         </Link>
       ))}
