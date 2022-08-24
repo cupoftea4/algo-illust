@@ -1,15 +1,24 @@
-export const bubbleSort = async (arr: number[], render: Function, wait: Function) => {
+export const bubbleSort = async (
+  arr: number[] | string[],
+  render: (arr: (number | string)[], swaps: number[]) => void,
+  wait: Function,
+  isAsc: boolean) => 
+{
   const len = arr.length;
-  for (let i = 0; i < len; i++) {
-    for (let j = 0; j < len; j++) {
-      if (arr[j] > arr[j + 1]) {
-        render([...arr], [j, j + 1]);
-        await wait();
-        [arr[j], arr[j + 1]] = [arr[j + 1], arr[j]];
+  let checked;
+    do {
+      checked = false;
+      for (let i = 0; i < len; i++) {
+        if ((arr[i] > arr[i + 1] && isAsc) || (arr[i] < arr[i + 1] && !isAsc)) {
+          [arr[i], arr[i + 1]] = [arr[i + 1], arr[i]];
+          render([...arr], [i, i + 1]);
+          console.log([...arr]);       
+          await wait();
+          checked = true;
+        }
       }
-    }
-  }
-  return arr;
+    } while (checked);
+    return arr;
 }
 
 export const selectionSort = async (arr: number[], render: Function, wait: Function) => {
@@ -31,7 +40,7 @@ export const selectionSort = async (arr: number[], render: Function, wait: Funct
 }
 
 export const shellSort = async (arr: number[], render: Function, wait: Function) => {
-   const len = arr.length;
+  const len = arr.length;
   for (let gap = Math.floor(len / 2); gap > 0; gap = Math.floor(gap / 2)) {
     for (let i = gap; i < len; i++) {
       let temp = arr[i];

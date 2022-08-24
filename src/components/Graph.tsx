@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import styles from './Graph.module.scss';
 
 const Graph = ({array, swaps } : {array: number[], swaps: number[]}) => {

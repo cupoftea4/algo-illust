@@ -20,17 +20,16 @@ Array.prototype.isSorted = function (): boolean {
   return true;
 }
 
-type OutletContextType = [Array<number>, (array: number[]) => void, () => Promise<void>]
+type OutletContextType = [Array<number>, (array: number[]) => void, () => Promise<void>, boolean];
 
 const SortComponent = (sort: Function) => {
     const Component = function() {
         const [isSorting, setIsSorting] = useState<boolean>(false);
         const [timeTaken, setTimeTaken] = useState<number>(0);
         const [swappingElements, setSwappingElements] = useState<number[]>([1, 2]);
-        const [array, setArray, waitDelay]: OutletContextType = useOutletContext();
+        const [array, setArray, waitDelay, isASC]: OutletContextType = useOutletContext();
         
-        useEffect(() => {
-          console.log(array.length); 
+        useEffect(() => { 
           if (array.length > 0 && !array.isSorted()) {
             if (isSorting) {
               alert("Wait for the sorting to finish");
@@ -50,7 +49,7 @@ const SortComponent = (sort: Function) => {
           setIsSorting(true);
           return new Promise(async (resolve) => {
             const startTime = performance.now();
-            const sortedArray = await sort(array, renderSwap, waitDelay);
+            const sortedArray = await sort(array, renderSwap, waitDelay, isASC);
             const sortTime = performance.now() - startTime;
             setTimeTaken(Math.round(sortTime * 100) / 100);
             setArray([...sortedArray]);
