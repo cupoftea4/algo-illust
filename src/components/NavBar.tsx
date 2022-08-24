@@ -7,7 +7,17 @@ type SortType = {
   name: string;
 }
 
-const NavBar = ({type, setType}: {type: SortTypeId, setType: (id: SortTypeId) => void}) => {
+type NavBarProps = {
+  type: SortTypeId;
+  setType: (type: SortTypeId) => void;
+  isAscState: [boolean, (isAsc: boolean) => void];
+  speedState: [number, (speed: number) => void];
+}
+
+const NavBar = ({type, setType, isAscState, speedState}: NavBarProps) => {
+  const [isASC, setIsASC] = isAscState;
+  const [illustDelay, setIllustDelay] = speedState;
+
   const sorts: SortType[] = [
     {id: 'bubble', name: 'Bubble Sort'},
     {id: 'selection', name: 'Selection Sort'},
@@ -18,19 +28,20 @@ const NavBar = ({type, setType}: {type: SortTypeId, setType: (id: SortTypeId) =>
   ];
 
   return (
-    <nav>
-      {sorts.map(sort => (
-        <Link
-          key={sort.id}
-          to={'/' + sort.id}
-          className={`${type === sort.id && styles.textSelected}`}
-          onClick={() => setType(sort.id)}
-        >
-          <div className={`${type === sort.id && styles.selected}`}></div>
-          {sort.name}
-        </Link>
-      ))}
-    </nav>
+      <nav>
+        {sorts.map(sort => (
+          <Link
+            key={sort.id}
+            to={'/' + sort.id}
+            className={`${type === sort.id && styles.textSelected}`}
+            onClick={() => setType(sort.id)}
+          >
+            <div className={`${type === sort.id && styles.selected}`}></div>
+            {sort.name}
+          </Link>
+        ))}
+
+      </nav>      
   );
 };
 

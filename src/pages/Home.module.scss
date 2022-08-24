@@ -1,11 +1,46 @@
 @import "../variables.scss";
 
+.header {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 1rem;
+    span {
+        display: flex;
+        gap: 1rem;
+        align-items: center;
+        color: $primary-clr;
+        select {
+            width: 4rem;
+            cursor: pointer;
+            border-radius: .6rem;
+            padding: .5rem;
+        }
+    }
+    .sortWay {
+        min-width: 4rem;
+        background-color: $primary-clr;
+        color: $secondary-clr;
+        padding: .5rem;
+        border-radius: .6rem;
+        cursor: pointer;
+        transition: .1s ease-in-out;
+        &.checked {
+            background-color: $secondary-clr;
+            color: $primary-clr;
+            border: .15rem solid $primary-clr;
+            transition: .1s ease-in-out;
+        }   
+    }
+}
+
 .params {
     width: 100%;
     display: flex;
     justify-content: center;
     color: $primary-clr;
 }
+
+
 
 form {
     display: flex;
@@ -29,15 +64,10 @@ form {
             color: $secondary-clr;
         }
     }
-    select {
-        width: 4rem;
-        cursor: pointer;
-        border-radius: .6rem;
-        padding: .5rem;
-    }
     label {
         margin-right: .5rem;
     }
+
 }
 
 @media screen and (max-width: 620px) {
