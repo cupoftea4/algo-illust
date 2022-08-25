@@ -13,6 +13,7 @@ const Home = () => {
   const [sortType, setSortType] = useState<SortTypeId>(href);
   const [isASC, setIsASC] = useState<boolean>(true);
   const [variant, setVariant] = useState<number>(0);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const waitDelay = () =>
     new Promise((resolve) => setTimeout(resolve, illustDelay));
@@ -21,7 +22,9 @@ const Home = () => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     const length = parseInt(data.get("arrayLength")?.toString() || "0");
+    setLoading(true);
     const array = await generateArray(length, variant);
+    setLoading(false);
     setArray(array as SortArray);
   };
 
@@ -56,7 +59,7 @@ const Home = () => {
               onChange={(e) => setVariant(parseInt(e.target.value))}
             >
               {Array.from({ length: 18 }, (_, i) => (
-                <option key={i} value={i}>{i === 0 ? "rand" : i }</option>
+                <option key={i} value={i}>{i === 0 ? "rand" : i}</option>
               ))}
             </select>
           </span>
@@ -81,7 +84,9 @@ const Home = () => {
           </form>
         </span>
       </div>
-      <Outlet context={[array, setArray, waitDelay, isASC, illustDelay]} />
+      {loading ?
+        <div className={styles.status}>Fetching data...</div> 
+      : <Outlet context={[array, setArray, waitDelay, isASC, illustDelay]} />}
     </>
   );
 };

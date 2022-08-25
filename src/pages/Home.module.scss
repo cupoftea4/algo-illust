@@ -70,6 +70,15 @@ form {
 
 }
 
+.status {
+    color: $primary-clr;
+    font-size: 1rem;
+    width: 100%;
+    text-align: right;
+    padding: 1rem;
+    font-family: 'Courier New', Courier, monospace;
+}
+
 @media screen and (max-width: 630px) {
     form {
         padding: .5rem;
