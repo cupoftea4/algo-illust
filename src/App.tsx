@@ -1,4 +1,4 @@
-import Home from './pages/Home';
+import SortPage from './pages/SortPage';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import SortComponent from './components/SortComponent';
 import { useMemo } from 'react';
@@ -16,7 +16,7 @@ function App() {
     <>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Home />} >
+          <Route path="/" element={<SortPage />} >
             <Route path="bubble" element={<BubbleSort/>} />
             <Route path="selection" element={<SelectionSort/>} />
             <Route path="shell" element={<ShellSort/>} />
@@ -24,7 +24,7 @@ function App() {
             <Route path="quick" element={<QuickSort/>} />
             <Route path="counting" element={<CountingSort/>} />
           </Route>
-          <Route path="*" element={<Home />} />
+          <Route path="*" element={<SortPage />} />
         </Routes>      
       </BrowserRouter>
 

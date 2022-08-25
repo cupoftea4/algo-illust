@@ -5,25 +5,29 @@ import styles from './SortComponent.module.scss';
 import isSorted from '../features/isSorted';
 import { SortArray } from '../types';
 
-type OutletContextType = [SortArray, (array: SortArray) => void, () => Promise<void>, boolean, number];
+type OutletContextType = [
+  [SortArray, (array: SortArray) => void],
+  () => Promise<void>,
+  boolean, number, 
+  [boolean, (state: boolean) => void],
+  [number[], (elements: number[]) => void]
+];
 
 const SortComponent = (sort: Function) => {
     const Component = function() {
-        const [isSorting, setIsSorting] = useState<boolean>(false);
         const [timeTaken, setTimeTaken] = useState<number>(0);
-        const [swappingElements, setSwappingElements] = useState<number[]>([1, 2]);
-        const [array, setArray, waitDelay, isASC, delay]: OutletContextType = useOutletContext();
+        // const [swappingElements, setSwappingElements] = useState<number[]>([]);
+        const [arrayState, waitDelay, isASC, delay, isSortingState, swappingElementsState]: OutletContextType = useOutletContext();
+        const [isSorting, setIsSorting] = isSortingState;
+        const [array, setArray] = arrayState;
+        const [swappingElements, setSwappingElements] = swappingElementsState;
         
         useEffect(() => { 
-          if (array.length > 0 && !isSorted(array)) {
-            if (isSorting) {
-              alert("Wait for the sorting to finish");
-            } else {
-              startSorting();
-            }
+          if (!isSorting && array.length > 0 && !isSorted(array, isASC)) {
+            startSorting();
           }
           // eslint-disable-next-line react-hooks/exhaustive-deps
-        }, [array.length]) 
+        }, [array]) 
 
         const renderSwap = (arr: SortArray, toSwap: number[]) => {
           setArray(arr);
@@ -55,4 +59,4 @@ const SortComponent = (sort: Function) => {
     return Component;
 }
 
-export default SortComponent
+export default SortComponent;

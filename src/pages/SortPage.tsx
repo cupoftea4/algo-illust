@@ -2,30 +2,37 @@ import NavBar from "../components/NavBar";
 import { Outlet } from "react-router-dom";
 import { useState } from "react";
 import { SortArray, SortTypeId } from "../types";
-import styles from "./Home.module.scss";
+import styles from "./SortPage.module.scss";
 import generateArray from "../features/generateArray";
+import Params from "../components/Params";
 
 const href: SortTypeId = window.location.href.split("/").pop() as SortTypeId;
 
-const Home = () => {
+const SortPage = () => {
   const [array, setArray] = useState<SortArray>([]);
-  const [illustDelay, setIllustDelay] = useState<number>(250);
   const [sortType, setSortType] = useState<SortTypeId>(href);
   const [isASC, setIsASC] = useState<boolean>(true);
-  const [variant, setVariant] = useState<number>(0);
   const [loading, setLoading] = useState<boolean>(false);
+  const [isSorting, setIsSorting] = useState<boolean>(false);
+  const [swappingElements, setSwappingElements] = useState<number[]>([]);
+  const [variant, setVariant] = useState<number>(0);
+  const [illustDelay, setIllustDelay] = useState<number>(250);
 
   const waitDelay = () =>
     new Promise((resolve) => setTimeout(resolve, illustDelay));
 
   const onLengthSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    const length = parseInt(data.get("arrayLength")?.toString() || "0");
-    setLoading(true);
-    const array = await generateArray(length, variant);
-    setLoading(false);
-    setArray(array as SortArray);
+    if (!isSorting) {
+      const data = new FormData(event.currentTarget);
+      const length = parseInt(data.get("arrayLength")?.toString() || "0");
+      setLoading(true);
+      const array = await generateArray(length, variant);
+      setLoading(false);
+      setArray(array as SortArray);      
+    } else {
+      alert("Please wait for the current sorting to finish.");
+    }
   };
 
   return (
@@ -41,27 +48,7 @@ const Home = () => {
             >
               {isASC ? "Asc" : "Desc"}
             </button>
-            <label htmlFor="illustSpeed">Speed:</label>
-            <select
-              name="illustSpeed"
-              defaultValue={3600 / 9}
-              title="Animation speed"
-              onChange={(e) => setIllustDelay(parseInt(e.target.value))}
-            >
-              {Array.from({ length: 12 }, (_, i) => (
-                <option key={i} value={3600 / (i + 2)}>{i + 1}</option>
-              ))}
-            </select>
-            <label htmlFor="illustSpeed">Var:</label>
-            <select
-              name="variant"
-              defaultValue={0}
-              onChange={(e) => setVariant(parseInt(e.target.value))}
-            >
-              {Array.from({ length: 18 }, (_, i) => (
-                <option key={i} value={i}>{i === 0 ? "rand" : i}</option>
-              ))}
-            </select>
+           <Params setIllustDelay={setIllustDelay} setVariant={setVariant} />
           </span>
         </span>
 
@@ -78,17 +65,22 @@ const Home = () => {
                 min={2}
               />
             </span>
-            <span>
-              <input type="submit" value="Run" />
-            </span>
+            <input type="submit" value="Run" />
           </form>
         </span>
       </div>
       {loading ?
         <div className={styles.status}>Fetching data...</div> 
-      : <Outlet context={[array, setArray, waitDelay, isASC, illustDelay]} />}
+      : <Outlet context={[
+          [array, setArray],
+          waitDelay,
+          isASC,
+          illustDelay,
+          [isSorting, setIsSorting],
+          [swappingElements, setSwappingElements]
+        ]} />}
     </>
   );
 };
 
-export default Home;
+export default SortPage;
