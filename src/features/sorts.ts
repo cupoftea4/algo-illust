@@ -12,8 +12,7 @@ export const bubbleSort = async (
       for (let i = 0; i < len; i++) {
         if ((arr[i] > arr[i + 1] && isAsc) || (arr[i] < arr[i + 1] && !isAsc)) {
           [arr[i], arr[i + 1]] = [arr[i + 1], arr[i]];
-          render([...arr], [i, i + 1]);
-          console.log([...arr]);       
+          render([...arr], [i, i + 1]);      
           await wait();
           checked = true;
           steps++;
@@ -23,39 +22,53 @@ export const bubbleSort = async (
     return steps;
 }
 
-export const selectionSort = async (arr: number[], render: Function, wait: Function) => {
+export const selectionSort = async (
+  arr: number[] | string[],
+  render: (arr: (number | string)[], swaps: number[]) => void,
+  wait: Function,
+  isAsc: boolean) => 
+{
   const len = arr.length;
+  let steps = 0;
   for (let i = 0; i < len; i++) {
-    let min = i;
+    let control = i;
     for (let j = i + 1; j < len; j++) {
-      if (arr[j] < arr[min]) {
-        min = j;
+      if ((arr[j] < arr[control] && isAsc) || (arr[j] > arr[control] && !isAsc)) {
+        control = j;      
       }
     }
-    if (i !== min) {
-      render([...arr], [i, min]);
+    if (i !== control) {
+      [arr[i], arr[control]] = [arr[control], arr[i]];
+      render([...arr], [i, control]);
       await wait();
-      [arr[i], arr[min]] = [arr[min], arr[i]];
+      steps++;
     }
   }
-  return arr;
+  return steps;
 }
 
-export const shellSort = async (arr: number[], render: Function, wait: Function) => {
+export const shellSort = async (
+  arr: number[] | string[],
+  render: (arr: (number | string)[], swaps: number[]) => void,
+  wait: Function,
+  isAsc: boolean) => 
+{
   const len = arr.length;
+  let steps = 0;
   for (let gap = Math.floor(len / 2); gap > 0; gap = Math.floor(gap / 2)) {
     for (let i = gap; i < len; i++) {
       let temp = arr[i];
       let j;
-      for (j = i; j >= gap && arr[j - gap] > temp; j -= gap) {
+      for (j = i; (j >= gap) && ((arr[j - gap] > temp && isAsc) || (arr[j - gap] < temp && !isAsc)); j -= gap) {
         arr[j] = arr[j - gap];
         render([...arr], [j, j - gap]);
         await wait();
+        steps++;
       }
       arr[j] = temp;
     }
   }
-  return arr;
+  return steps;
 }
 
 export const countingSort = async (arr: number[], render: Function, wait: Function) => {

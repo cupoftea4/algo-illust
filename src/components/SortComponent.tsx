@@ -19,7 +19,7 @@ const SortComponent = (sort: Function) => {
             if (isSorting) {
               alert("Wait for the sorting to finish");
             } else {
-              bubbleSort();
+              startSorting();
             }
           }
           // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -30,9 +30,9 @@ const SortComponent = (sort: Function) => {
           setSwappingElements(toSwap);
         }
       
-        const bubbleSort = (): Promise<SortArray> | undefined => {
+        const startSorting = (): Promise<SortArray> | undefined => {
           setIsSorting(true);
-          return new Promise(async (resolve) => {
+          return new Promise(async () => {
             const startTime = performance.now();
             const steps = await sort(array, renderSwap, waitDelay, isASC);
             const sortTime = performance.now() - startTime - steps * delay;
