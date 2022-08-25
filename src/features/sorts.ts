@@ -1,24 +1,26 @@
-export const bubbleSort = async (
+export const bubbleSort = (
   arr: number[] | string[],
   render: (arr: (number | string)[], swaps: number[]) => void,
   wait: Function,
-  isAsc: boolean) => 
-{
-  const len = arr.length;
-  let checked;
-    do {
-      checked = false;
-      for (let i = 0; i < len; i++) {
-        if ((arr[i] > arr[i + 1] && isAsc) || (arr[i] < arr[i + 1] && !isAsc)) {
-          [arr[i], arr[i + 1]] = [arr[i + 1], arr[i]];
-          render([...arr], [i, i + 1]);
-          console.log([...arr]);       
-          await wait();
-          checked = true;
+  isAsc: boolean,
+  controller: AbortController
+) => {
+  return new Promise(async (resolve) => {
+    const len = arr.length;
+    let checked;
+      do {
+        checked = false;
+        for (let i = 0; i < len; i++) {
+          if ((isAsc && arr[i] > arr[i + 1]) || (!isAsc && arr[i] < arr[i + 1])) {
+            [arr[i], arr[i + 1]] = [arr[i + 1], arr[i]];
+            render([...arr], [i, i + 1]);      
+            await wait(controller);
+            checked = true;
+          }
         }
-      }
-    } while (checked);
-    return arr;
+      } while (checked);
+      resolve([...arr]);
+  });
 }
 
 export const selectionSort = async (arr: number[], render: Function, wait: Function) => {

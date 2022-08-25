@@ -1,8 +1,9 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { useOutletContext } from 'react-router-dom';
 import Graph from './Graph';
 import styles from './SortComponent.module.scss';
 import Array from "../features/array-proto";
+import { SortArray } from '../types';
 
 declare global {
   interface Array<T> {
@@ -20,7 +21,7 @@ Array.prototype.isSorted = function (): boolean {
   return true;
 }
 
-type OutletContextType = [Array<number>, (array: number[]) => void, () => Promise<void>, boolean];
+type OutletContextType = [Array<number | string>, (array: SortArray) => void, () => Promise<void>, boolean];
 
 const SortComponent = (sort: Function) => {
     const Component = function() {
@@ -28,11 +29,17 @@ const SortComponent = (sort: Function) => {
         const [timeTaken, setTimeTaken] = useState<number>(0);
         const [swappingElements, setSwappingElements] = useState<number[]>([1, 2]);
         const [array, setArray, waitDelay, isASC]: OutletContextType = useOutletContext();
+        const [restart, setRestart] = useState<boolean>(false);
+        const controller = useMemo(() => new AbortController(), []);
         
         useEffect(() => { 
+          console.log('array', array, array.isSorted(), isSorting);
+          
           if (array.length > 0 && !array.isSorted()) {
             if (isSorting) {
-              alert("Wait for the sorting to finish");
+              controller.abort();
+              bubbleSort();
+              // alert("Wait for the sorting to finish");
             } else {
               bubbleSort();
             }
@@ -45,17 +52,23 @@ const SortComponent = (sort: Function) => {
           setSwappingElements(toSwap);
         }
       
-        const bubbleSort = (): Promise<number[]> | undefined => {
+        const bubbleSort = (): Promise<SortArray> | undefined => {
           setIsSorting(true);
-          return new Promise(async (resolve) => {
+          return new Promise(async (_, reject) => {
             const startTime = performance.now();
-            const sortedArray = await sort(array, renderSwap, waitDelay, isASC);
-            const sortTime = performance.now() - startTime;
-            setTimeTaken(Math.round(sortTime * 100) / 100);
-            setArray([...sortedArray]);
-            setSwappingElements([-1]);
-            setIsSorting(false);
-            resolve(sortedArray);
+            await sort(array, renderSwap, waitDelay, isASC, controller)
+              .then(() => {
+                // setArray(arr); 
+                const sortTime = performance.now() - startTime;
+                setTimeTaken(Math.round(sortTime * 100) / 100);
+                setSwappingElements([-1]);
+                setIsSorting(false);
+              })
+              .catch(() => {
+                setIsSorting(false);
+                console.log(array); 
+                // bubbleSort();                
+              });
           });
         }
 
@@ -72,4 +85,4 @@ const SortComponent = (sort: Function) => {
     return Component;
 }
 
-export default SortComponent
+export default SortComponent;

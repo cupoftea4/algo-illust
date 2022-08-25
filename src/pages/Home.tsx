@@ -1,8 +1,9 @@
 import NavBar from "../components/NavBar";
 import { Outlet } from "react-router-dom";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { SortTypeId } from "../types";
-import styles from "./Home.module.scss";;
+import styles from "./Home.module.scss";
+import { getName } from "../features/apis";
 
 const href: SortTypeId = window.location.href.split('/').pop() as SortTypeId;
 
@@ -12,22 +13,25 @@ const Home = () => {
   const [sortType, setSortType] = useState<SortTypeId>(href);
   const [isASC, setIsASC] = useState<boolean>(true);
 
-  const waitDelay = () => new Promise(resolve => setTimeout(resolve, illustDelay));
-
-  const getName = async () => {
-    const response = await fetch('https://randomuser.me/api/');
-    const { results } = await response.json();
-    return results[0].name.first;
-  }
+  const waitDelay = (controller: AbortController) => {
+    
+    return new Promise((resolve, reject) => {
+      controller.signal.addEventListener('abort', () => {
+        console.log('Aborted in Home');
+        reject();
+      });
+      setTimeout(resolve, illustDelay);    
+    })
+  };
   
   const onLengthSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     const length = parseInt(data.get('arrayLength')?.toString() || '0');
     // strings
-    const array = await Promise.all(Array(length).fill(0).map(getName));
+    // const array = await Promise.all(Array(length).fill(0).map(getName));
     // decimal numbers
-    // const array = Array.from({ length }, () => Math.round(Math.random() * 1000) / 10);
+    const array = Array.from({ length }, () => Math.round(Math.random() * 1000) / 10);
     // integers
     // const array = Array.from({ length }, () => Math.floor(Math.random() * 100));
     setArray(array);
