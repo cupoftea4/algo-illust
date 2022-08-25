@@ -2,67 +2,96 @@ import NavBar from "../components/NavBar";
 import { Outlet } from "react-router-dom";
 import { useState } from "react";
 import { SortTypeId } from "../types";
-import styles from "./Home.module.scss";;
+import styles from "./Home.module.scss";
+import generateArray from "../features/generateArray";
 
-const href: SortTypeId = window.location.href.split('/').pop() as SortTypeId;
+const href: SortTypeId = window.location.href.split("/").pop() as SortTypeId;
 
 const Home = () => {
   const [array, setArray] = useState<number[] | string[]>([]);
   const [illustDelay, setIllustDelay] = useState<number>(250);
   const [sortType, setSortType] = useState<SortTypeId>(href);
   const [isASC, setIsASC] = useState<boolean>(true);
+  const [variant, setVariant] = useState<number>(8);
 
-  const waitDelay = () => new Promise(resolve => setTimeout(resolve, illustDelay));
+  const waitDelay = () =>
+    new Promise((resolve) => setTimeout(resolve, illustDelay));
 
-  const getName = async () => {
-    const response = await fetch('https://randomuser.me/api/');
-    const { results } = await response.json();
-    return results[0].name.first;
-  }
-  
   const onLengthSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    const length = parseInt(data.get('arrayLength')?.toString() || '0');
-    // strings
-    const array = await Promise.all(Array(length).fill(0).map(getName));
-    // decimal numbers
-    // const array = Array.from({ length }, () => Math.round(Math.random() * 1000) / 10);
-    // integers
-    // const array = Array.from({ length }, () => Math.floor(Math.random() * 100));
-    setArray(array);
-  }
+    const length = parseInt(data.get("arrayLength")?.toString() || "0");
+
+    const array = await generateArray(length, variant);
+
+    setArray(array as number[] | string[]);
+  };
 
   return (
     <>
       <div>
         <span className={styles.header}>
-          <NavBar type={sortType} setType={setSortType} isAscState={[isASC, setIsASC]} speedState={[illustDelay, setIllustDelay]}/>
+          <NavBar
+            type={sortType}
+            setType={setSortType}
+            isAscState={[isASC, setIsASC]}
+            speedState={[illustDelay, setIllustDelay]}
+          />
           <span>
-          <button className={`${styles.sortWay} ${!isASC && styles.checked}`} onClick={() => setIsASC(!isASC)}>
-              {isASC ? 'Asc' : 'Desc'}
-          </button>         
-          <label htmlFor="illustSpeed">Speed:</label>
-          <select name="illustSpeed" defaultValue={3600/9} onChange={e => setIllustDelay(parseInt(e.target.value))}>
-            {Array.from({ length: 12 }, (_, i) => <option key={i} value={3600/(i+2)}>{i+1}</option>)}
-          </select>            
+            <button
+              className={`${styles.sortWay} ${!isASC && styles.checked}`}
+              onClick={() => setIsASC(!isASC)}
+            >
+              {isASC ? "Asc" : "Desc"}
+            </button>
+            <label htmlFor="illustSpeed">Speed:</label>
+            <select
+              name="illustSpeed"
+              defaultValue={3600 / 9}
+              onChange={(e) => setIllustDelay(parseInt(e.target.value))}
+            >
+              {Array.from({ length: 12 }, (_, i) => (
+                <option key={i} value={3600 / (i + 2)}>
+                  {i + 1}
+                </option>
+              ))}
+            </select>
+            <label htmlFor="illustSpeed">Variant:</label>
+            <select
+              name="variant"
+              defaultValue={8}
+              onChange={(e) => setVariant(parseInt(e.target.value))}
+            >
+              {Array.from({ length: 10 }, (_, i) => (
+                <option key={i} value={i + 8}>
+                  {i + 8}
+                </option>
+              ))}
+            </select>
+          </span>
         </span>
-      </span>
-      <span className={styles.params}>
-        <form onSubmit={onLengthSubmit}>
-          <span>
-            <label htmlFor="arrayLength">Array Length:</label>
-              <input name="arrayLength" placeholder="length" type={'number'} defaultValue="10" max={40}/>              
-          </span>
-          <span>            
-          <input type="submit" value="Run" />          
-          </span>
-        </form>
-      </span>
+
+        <span className={styles.params}>
+          <form onSubmit={onLengthSubmit}>
+            <span>
+              <label htmlFor="arrayLength">Array Length:</label>
+              <input
+                name="arrayLength"
+                placeholder="length"
+                type={"number"}
+                defaultValue="10"
+                max={40}
+              />
+            </span>
+            <span>
+              <input type="submit" value="Run" />
+            </span>
+          </form>
+        </span>
       </div>
-      <Outlet context={[array, setArray, waitDelay, isASC]} /> 
+      <Outlet context={[array, setArray, waitDelay, isASC]} />
     </>
   );
 };
 
-export default Home; 
+export default Home;
