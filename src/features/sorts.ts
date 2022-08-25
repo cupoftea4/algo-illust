@@ -5,6 +5,7 @@ export const bubbleSort = async (
   isAsc: boolean) => 
 {
   const len = arr.length;
+  let steps = 0;
   let checked;
     do {
       checked = false;
@@ -15,10 +16,11 @@ export const bubbleSort = async (
           console.log([...arr]);       
           await wait();
           checked = true;
+          steps++;
         }
       }
     } while (checked);
-    return arr;
+    return steps;
 }
 
 export const selectionSort = async (arr: number[], render: Function, wait: Function) => {

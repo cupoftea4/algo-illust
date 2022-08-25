@@ -8,7 +8,7 @@ import App from './App';
   - add a button to reset the array if possible
   - probably dynamic speed change
   - do something with inline styles
-  - fix not working Array.prototype.isSorted()
+  - fix not working Array.prototype.isSorted() 
 */
 
 const root = ReactDOM.createRoot(

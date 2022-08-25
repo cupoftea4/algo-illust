@@ -10,13 +10,9 @@ type SortType = {
 type NavBarProps = {
   type: SortTypeId;
   setType: (type: SortTypeId) => void;
-  isAscState: [boolean, (isAsc: boolean) => void];
-  speedState: [number, (speed: number) => void];
 }
 
-const NavBar = ({type, setType, isAscState, speedState}: NavBarProps) => {
-  const [isASC, setIsASC] = isAscState;
-  const [illustDelay, setIllustDelay] = speedState;
+const NavBar = ({type, setType}: NavBarProps) => {
 
   const sorts: SortType[] = [
     {id: 'bubble', name: 'Bubble Sort'},

@@ -1,18 +1,18 @@
 import NavBar from "../components/NavBar";
 import { Outlet } from "react-router-dom";
 import { useState } from "react";
-import { SortTypeId } from "../types";
+import { SortArray, SortTypeId } from "../types";
 import styles from "./Home.module.scss";
 import generateArray from "../features/generateArray";
 
 const href: SortTypeId = window.location.href.split("/").pop() as SortTypeId;
 
 const Home = () => {
-  const [array, setArray] = useState<number[] | string[]>([]);
+  const [array, setArray] = useState<SortArray>([]);
   const [illustDelay, setIllustDelay] = useState<number>(250);
   const [sortType, setSortType] = useState<SortTypeId>(href);
   const [isASC, setIsASC] = useState<boolean>(true);
-  const [variant, setVariant] = useState<number>(8);
+  const [variant, setVariant] = useState<number>(0);
 
   const waitDelay = () =>
     new Promise((resolve) => setTimeout(resolve, illustDelay));
@@ -21,26 +21,20 @@ const Home = () => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     const length = parseInt(data.get("arrayLength")?.toString() || "0");
-
     const array = await generateArray(length, variant);
-
-    setArray(array as number[] | string[]);
+    setArray(array as SortArray);
   };
 
   return (
     <>
       <div>
         <span className={styles.header}>
-          <NavBar
-            type={sortType}
-            setType={setSortType}
-            isAscState={[isASC, setIsASC]}
-            speedState={[illustDelay, setIllustDelay]}
-          />
+          <NavBar type={sortType} setType={setSortType} />
           <span>
             <button
               className={`${styles.sortWay} ${!isASC && styles.checked}`}
               onClick={() => setIsASC(!isASC)}
+              title={`Sort in ${isASC ? "ascending" : "descending"} order`}
             >
               {isASC ? "Asc" : "Desc"}
             </button>
@@ -48,24 +42,21 @@ const Home = () => {
             <select
               name="illustSpeed"
               defaultValue={3600 / 9}
+              title="Animation speed"
               onChange={(e) => setIllustDelay(parseInt(e.target.value))}
             >
               {Array.from({ length: 12 }, (_, i) => (
-                <option key={i} value={3600 / (i + 2)}>
-                  {i + 1}
-                </option>
+                <option key={i} value={3600 / (i + 2)}>{i + 1}</option>
               ))}
             </select>
-            <label htmlFor="illustSpeed">Variant:</label>
+            <label htmlFor="illustSpeed">Var:</label>
             <select
               name="variant"
-              defaultValue={8}
+              defaultValue={0}
               onChange={(e) => setVariant(parseInt(e.target.value))}
             >
-              {Array.from({ length: 10 }, (_, i) => (
-                <option key={i} value={i + 8}>
-                  {i + 8}
-                </option>
+              {Array.from({ length: 18 }, (_, i) => (
+                <option key={i} value={i}>{i === 0 ? "rand" : i }</option>
               ))}
             </select>
           </span>
@@ -81,6 +72,7 @@ const Home = () => {
                 type={"number"}
                 defaultValue="10"
                 max={40}
+                min={2}
               />
             </span>
             <span>
@@ -89,7 +81,7 @@ const Home = () => {
           </form>
         </span>
       </div>
-      <Outlet context={[array, setArray, waitDelay, isASC]} />
+      <Outlet context={[array, setArray, waitDelay, isASC, illustDelay]} />
     </>
   );
 };
