@@ -43,10 +43,15 @@ const generateArray = async (length: number, variant: number) => {
       console.log("Names: ", names);
       return names;
     case 9:
-      array = Array.from({ length }, () => Math.round(Math.random() * 1000) / 10);
-      const firstNegative = array.findIndex((el) => el < 0);
-      const lastNegative = findLastIndex(array, (el) => el < 0);
+      array = Array.from(
+        { length }, 
+        () => (Math.round(Math.random() * 1000) / 10) * (Math.floor(Math.random() * 10) % 2 === 0 ? 1 : -1)
+      );
+      console.log("Array: ", array);
+      const firstNegative = array.findIndex((el) => el < 0) | 0;
+      const lastNegative = findLastIndex(array, (el) => el < 0) | 1;
       const resultArray = array.slice(array.indexOf(firstNegative) + 1, array.lastIndexOf(lastNegative)); 
+      console.log("Sliced array: ", resultArray);
       return resultArray;
     case 10:
       const secondArray = Array.from({ length }, () => Math.floor(Math.random() * 100));

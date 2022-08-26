@@ -1,6 +1,8 @@
+import { SortArray } from "../types";
+
 export const bubbleSort = async (
-  arr: number[] | string[],
-  render: (arr: (number | string)[], swaps: number[]) => void,
+  arr: SortArray,
+  render: (arr: SortArray, swaps: number[]) => void,
   wait: Function,
   isAsc: boolean) => 
 {
@@ -23,8 +25,8 @@ export const bubbleSort = async (
 }
 
 export const selectionSort = async (
-  arr: number[] | string[],
-  render: (arr: (number | string)[], swaps: number[]) => void,
+  arr: SortArray,
+  render: (arr: SortArray, swaps: number[]) => void,
   wait: Function,
   isAsc: boolean) => 
 {
@@ -48,8 +50,8 @@ export const selectionSort = async (
 }
 
 export const shellSort = async (
-  arr: number[] | string[],
-  render: (arr: (number | string)[], swaps: number[]) => void,
+  arr: SortArray,
+  render: (arr: SortArray, swaps: number[]) => void,
   wait: Function,
   isAsc: boolean) => 
 {

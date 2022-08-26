@@ -7,7 +7,7 @@ const Graph = ({array, swaps } : {array: SortArray, swaps: number[]}) => {
       {array.length <= 40 && !Array.isArray(array[0]) ? array.map((item, index) =>
         <div key={index} 
             className={`${styles.arrayItem} ${swaps[0] === -1 && styles.sorted}`} 
-            style={{ width: 100 / array.length + '%', height: ((typeof item === 'number') ? item : 80).toString() + '%' }}>
+            style={{ width: 100 / array.length + '%', height: ((typeof item === 'number') ? Math.abs(item) : 80).toString() + '%' }}>
           <div
             className={`
               ${styles.rectangle} 
