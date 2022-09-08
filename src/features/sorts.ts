@@ -106,27 +106,6 @@ export const countingSort = async (
   return sorted;
 };
 
-// export const mergeSort = async (arr: number[], render: Function, wait: Function) => {
-//   const merge = (left: number[], right: number[]) => {
-//     const result: number[] = [];
-//     while (left.length && right.length) {
-//       if (left[0] <= right[0]) {
-//         result.push(left.shift() || 0);
-//       } else {
-//         result.push(right.shift() || 0);
-//       }
-//     }
-//     return [...result, ...left, ...right];
-//   }
-//   if (arr.length < 2) {
-//     return arr;
-//   }
-//   const middle = Math.floor(arr.length / 2);
-//   const left = arr.slice(0, middle);
-//   const right = arr.slice(middle);
-//   return merge(await mergeSort(left, render, wait), await mergeSort(right, render, wait));
-// }
-
 export const quickSort: Function = async (
   arr: number[],
   render: Function,
@@ -137,7 +116,7 @@ export const quickSort: Function = async (
 };
 
 async function swap(
-  items: number[],
+  items: number[] | number[][],
   leftIndex: number,
   rightIndex: number,
   render: Function,
@@ -146,40 +125,74 @@ async function swap(
   var temp = items[leftIndex];
   items[leftIndex] = items[rightIndex];
   items[rightIndex] = temp;
-  console.log(items);
-
+  //console.log(items);
   render([...items], [leftIndex, rightIndex]);
   await wait();
 }
 
+async function swapLocal(
+  items: number[] | number[][],
+  leftIndex: number,
+  rightIndex: number
+) {
+  var temp = items[leftIndex];
+  items[leftIndex] = items[rightIndex];
+  items[rightIndex] = temp;
+  console.log(items);
+}
+
 async function partition(
-  items: number[],
+  items: number[] | number[][],
   left: number,
   right: number,
   render: Function,
   wait: Function
 ) {
-  var pivot = items[Math.floor((right + left) / 2)], //middle element
-    i = left, //left pointer
-    j = right; //right pointer
-  while (i <= j) {
-    while (items[i] < pivot) {
-      i++;
+  if (Array.isArray(items[0])) {
+    let matrix = [...(items as number[][])];
+    let pivot = matrix[Math.floor((right + left) / 2)][0]; //middle elemen
+    console.log(pivot);
+    let i = left; //left pointer
+    let j = right; //right pointer
+    while (i <= j) {
+      while (matrix[i][0] < pivot) {
+        i++;
+      }
+      while (matrix[j][0] > pivot) {
+        j--;
+      }
+      if (i <= j) {
+        swapLocal(matrix, i, j);
+        await swap(items, i, j, render, wait); //sawpping two elements
+        i++;
+        j--;
+      }
     }
-    while (items[j] > pivot) {
-      j--;
+
+    return i;
+  } else {
+    var pivot = items[Math.floor((right + left) / 2)]; //middle element
+    let i = left; //left pointer
+    let j = right; //right pointer
+    while (i <= j) {
+      while (items[i] < pivot) {
+        i++;
+      }
+      while (items[j] > pivot) {
+        j--;
+      }
+      if (i <= j) {
+        await swap(items, i, j, render, wait); //sawpping two elements
+        i++;
+        j--;
+      }
     }
-    if (i <= j) {
-      await swap(items, i, j, render, wait); //sawpping two elements
-      i++;
-      j--;
-    }
+    return i;
   }
-  return i;
 }
 
 async function quickSortLocal(
-  items: number[],
+  items: number[] | Array<number[]>,
   left: number,
   right: number,
   render: Function,
