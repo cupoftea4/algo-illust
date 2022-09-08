@@ -48,9 +48,11 @@ const generateArray = async (length: number, variant: number) => {
         () => (Math.round(Math.random() * 1000) / 10) * (Math.floor(Math.random() * 10) % 2 === 0 ? 1 : -1)
       );
       console.log("Array: ", array);
-      const firstNegative = array.findIndex((el) => el < 0) | 0;
-      const lastNegative = findLastIndex(array, (el) => el < 0) | 1;
-      const resultArray = array.slice(array.indexOf(firstNegative) + 1, array.lastIndexOf(lastNegative)); 
+      const firstNegative = array.findIndex((el) => el < 0) || 0;
+      const lastNegative = findLastIndex(array, (el) => el < 0) || 1;
+      console.log("First negative: ", firstNegative);
+      console.log("Last negative: ", lastNegative);
+      const resultArray = array.slice(firstNegative + 1, lastNegative); 
       console.log("Sliced array: ", resultArray);
       return resultArray;
     case 10:
@@ -70,12 +72,12 @@ const generateArray = async (length: number, variant: number) => {
     case 13:
       array = Array.from({ length },
         () =>
-          Math.floor(Math.random() * 100) *
+          Math.floor(Math.random() * 100) / 10 *
           (Math.floor(Math.random() * 2) === 1 ? 1 : -1)
       );
       const arrayWithoutMultiples = array.filter((item) => item % 3 !== 0);
       console.log("Array without multiples: ", arrayWithoutMultiples);
-      const arrayWithPower2 = arrayWithoutMultiples.map((item) => (item) * (item));
+      const arrayWithPower2 = arrayWithoutMultiples.map((item) => Math.floor((item) * (item) * 100) / 100);
       console.log("Array with power 2: ", arrayWithPower2);
       return arrayWithPower2;
     case 14:

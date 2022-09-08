@@ -13,12 +13,14 @@ export const bubbleSort = async (
       checked = false;
       for (let i = 0; i < len; i++) {
         if ((arr[i] > arr[i + 1] && isAsc) || (arr[i] < arr[i + 1] && !isAsc)) {
-          [arr[i], arr[i + 1]] = [arr[i + 1], arr[i]];
           render([...arr], [i, i + 1]);      
           await wait();
+          [arr[i], arr[i + 1]] = [arr[i + 1], arr[i]];
           checked = true;
           steps++;
+          
         }
+        if(i === len - 1) render([...arr], [i, i + 1]);
       }
     } while (checked);
     return steps;
@@ -40,11 +42,15 @@ export const selectionSort = async (
       }
     }
     if (i !== control) {
-      [arr[i], arr[control]] = [arr[control], arr[i]];
       render([...arr], [i, control]);
       await wait();
+      [arr[i], arr[control]] = [arr[control], arr[i]];
       steps++;
+      console.log(arr);
+      
     }
+    if(i === len - 1) render([...arr], [i, i]);
+
   }
   return steps;
 }
