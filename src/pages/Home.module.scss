@@ -1,5 +1,11 @@
 @import url('https://fonts.googleapis.com/css2?family=Literata:opsz@7..72&family=Roboto+Mono:ital,wght@0,400;1,300;1,600&display=swap');
 
+:root {
+  --bg-color: black;
+  --typewriterSpeed: 6s;
+  --typewriterCharacters: 18;
+}
+
 body {
   color: white;
 }
@@ -12,51 +18,104 @@ body {
   align-items: center;
   justify-content: center;
   height: 100vh;
-  .tittle {
+
+  .loadScreen {
     opacity: 0;
     text-align: center;
     animation: startApp 1.6s ease-in-out;
   }
-  .menu {
-    padding: 2rem;
-    transition: all .5s ease-in-out;
-    input {
-      background-color: black;
-      color: white;
-      border: none;
-      border-bottom: 1px solid white;
-      padding: .5rem;
-      margin: .5rem 1rem 1rem 1rem;
-      font-size: 1.2em;
-      width:85%;
-      &:focus {
-        outline: none;
+
+  .homeContent {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 3rem;
+    align-items: center;
+    justify-content: center;
+
+    .header {
+      font-size: clamp(1rem, 3vw + 1rem, 4rem);
+      position: relative;
+      font-family: "Source Code Pro", monospace;
+      position: relative;
+      width: max-content;
+      &::after, 
+      &::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+      }
+      &::before {
+        background: var(--bg-color);
+        animation: typewriter var(--typewriterSpeed)
+          steps(var(--typewriterCharacters)) 1s forwards;
+      }
+      &::after {
+        width: 0.125em;
+        background: transparent;
+        animation: typewriter var(--typewriterSpeed)
+            steps(var(--typewriterCharacters)) 1s forwards,
+          blink 800ms steps(var(--typewriterCharacters)) calc(calc(var(--typewriterCharacters) / 2) + 1);
       }
     }
 
+    .menu {
+      padding: 2rem;
+      transition: all .5s ease-in-out;
+      
+      input {
+        background-color: black;
+        color: white;
+        border: none;
+        border-bottom: 1px solid white;
+        padding: .5rem;
+        margin: .5rem 1rem 1rem 1rem;
+        font-size: 1.2em;
+        width: 85%;
+        &:focus {
+          outline: none;
+        }
+      }
+      .terminalInput{
+        display: flex;
+        align-items: center;
+      }
+      
+      .items {
+        list-style: none;
+        a {
+          display: block;
+          color: inherit;
+          padding: 0 .2rem;
+        }
+        a:hover, .selected  {
+          transition: all .2s ease-in-out;
+          color: black;
+          background-color: white;
+          border-radius: 5px;
+        }
+  
+      } 
+    }
+
   }
-  .items {
-    list-style: none;
-    a {
-      display: block;
-      color: inherit;
-      padding: 0 .2rem;
-    }
-    a:hover, .selected  {
-      transition: all .2s ease-in-out;
-      color: black;
-      background-color: white;
-      border-radius: 5px;
-    }
-
-  } 
+  
 }
 
-.terminalInput{
-  display: flex;
-  align-items: center;
+
+@keyframes typewriter {
+  to {
+    left: 100%;
+  }
 }
 
+@keyframes blink {
+  to {
+    background: white;
+  }
+}
 
 @keyframes startApp {
   0% {

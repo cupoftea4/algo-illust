@@ -9,9 +9,12 @@ const Home = () => {
   const [selectedItem, setSelectedItem] = React.useState(0);
   const [inputFocus, setInputFocus]: any = useFocus();
   const navigate = useNavigate();
+  const header = "Let's get started!";
 
-  useEffect(() => {    
-    if (inputFocus.current) setInputFocus();
+  useEffect(() => {   
+    setTimeout(() => {
+      if (inputFocus.current) setInputFocus();
+    }, 1000 * (header.length / 2 + 1));
   }, [showTittle]);
 
   const menuItems = [
@@ -55,24 +58,27 @@ const Home = () => {
     <div>
       <div className={styles.central}>
         {showTittle ?
-          <h1 className={styles.tittle}>Algorithms Visualizer</h1>
+          <h1 className={styles.loadScreen}>Algorithms Visualizer</h1>
           :
-          <div className={styles.menu}>
-            <span className={styles.terminalInput} >
-              <TerminalArrow />
-               <input type="text" onChange={handleInput} ref={inputFocus}/> 
-            </span>
-            <div className={styles.items}>
-              {menuItems.map((item, index) => (
-                <Link 
-                  className={selectedItem === index ? styles.selected : ''}
-                  onMouseOver={() => setSelectedItem(index)} 
-                  to={item.path} 
-                  key={index}>
-                    {item.name}
-                </Link>
-                ))  
-              }
+          <div className={styles.homeContent}>
+            <h1 className={styles.header}>{header}</h1>
+            <div className={styles.menu}>
+              <span className={styles.terminalInput} >
+                <TerminalArrow />
+                <input type="text" onChange={handleInput} ref={inputFocus}/>
+              </span>
+              <div className={styles.items}>
+                {menuItems.map((item, index) => (
+                  <Link
+                    className={selectedItem === index ? styles.selected : ''}
+                    onMouseOver={() => setSelectedItem(index)}
+                    to={item.path}
+                    key={index}>
+                      {item.name}
+                  </Link>
+                  ))
+                }
+              </div>
             </div>
           </div>
         }
