@@ -1,22 +1,16 @@
-import { SortArray, SortTypeId } from "../types";
+import { SortFunc, SortArray, RenderFunc } from "../types";
 import isSorted from "./isSorted";
 
-export const bubbleSort = async (
-  arr: SortArray,
-  render: (arr: SortArray, swaps: number[]) => void,
-  wait: Function,
-  isAsc: boolean
-) => {
+export const bubbleSort: SortFunc = async (arr, render, isASC) => {
   const len = arr.length;
   let steps = 0;
   let checked;
   do {
     checked = false;
     for (let i = 0; i < len; i++) {
-      if ((arr[i] > arr[i + 1] && isAsc) || (arr[i] < arr[i + 1] && !isAsc)) {
+      if ((arr[i] > arr[i + 1] && isASC) || (arr[i] < arr[i + 1] && !isASC)) {
         [arr[i], arr[i + 1]] = [arr[i + 1], arr[i]];
-        render([...arr], [i, i + 1]);
-        await wait();
+        await render([...arr], [i, i + 1]);
         checked = true;
         steps++;
       }
@@ -25,40 +19,29 @@ export const bubbleSort = async (
   return steps;
 };
 
-export const selectionSort = async (
-  arr: SortArray,
-  render: (arr: SortArray, swaps: number[]) => void,
-  wait: Function,
-  isAsc: boolean
-) => {
+export const selectionSort: SortFunc = async (arr, render, isASC) => {
   const len = arr.length;
   let steps = 0;
   for (let i = 0; i < len; i++) {
     let control = i;
     for (let j = i + 1; j < len; j++) {
       if (
-        (arr[j] < arr[control] && isAsc) ||
-        (arr[j] > arr[control] && !isAsc)
+        (arr[j] < arr[control] && isASC) ||
+        (arr[j] > arr[control] && !isASC)
       ) {
         control = j;
       }
     }
     if (i !== control) {
       [arr[i], arr[control]] = [arr[control], arr[i]];
-      render([...arr], [i, control]);
-      await wait();
+      await render([...arr], [i, control]);
       steps++;
     }
   }
   return steps;
 };
 
-export const shellSort = async (
-  arr: SortArray,
-  render: (arr: SortArray, swaps: number[]) => void,
-  wait: Function,
-  isAsc: boolean
-) => {
+export const shellSort: SortFunc = async (arr, render, isASC) => {
   const len = arr.length;
   let steps = 0;
   for (let gap = Math.floor(len / 2); gap > 0; gap = Math.floor(gap / 2)) {
@@ -68,12 +51,11 @@ export const shellSort = async (
       for (
         j = i;
         j >= gap &&
-        ((arr[j - gap] > temp && isAsc) || (arr[j - gap] < temp && !isAsc));
+        ((arr[j - gap] > temp && isASC) || (arr[j - gap] < temp && !isASC));
         j -= gap
       ) {
         arr[j] = arr[j - gap];
-        render([...arr], [j, j - gap]);
-        await wait();
+        await render([...arr], [j, j - gap]);
         steps++;
         console.log(arr);
       }
@@ -85,19 +67,19 @@ export const shellSort = async (
   return steps;
 };
 
-export const countingSort = async (
-  arr: number[],
-  render: (arr: SortArray, swaps: number[]) => void,
-  wait: Function
-) => {
+export const countingSort: SortFunc = async (arr, render, isASC) => {
+  if (Array.isArray(arr[0]) || (typeof arr[0] === "string")) {
+    alert("Counting sort only works with numbers");
+    throw new Error("Counting sort can only be used with numbers");
+  }
   console.log(arr);
   let steps = 0;
   const len = arr.length;
-  const max = Math.max(...arr);
-  const min = Math.min(...arr);
+  const max = Math.max(...arr as number[]);
+  const min = Math.min(...arr as number[]);
   const count = new Array(max - min + 1).fill(0);
   for (let i = 0; i < len; i++) {
-    count[arr[i] - min]++;
+    count[arr[i] as number - min]++;
   }
   console.log(count);
   for (let i = 1; i < count.length; i++) {
@@ -106,37 +88,30 @@ export const countingSort = async (
   console.log(count);
   const sorted = new Array(len).fill(0);
   for (let i = len - 1; i >= 0; i--) {
-    sorted[--count[arr[i] - min]] = arr[i];
-    console.log(count[arr[i] - min], arr[i]);
+    sorted[--count[arr[i] as number - min]] = arr[i];
+    console.log(count[arr[i] as number - min], arr[i]);
     console.log(sorted);
     steps++;
-    render([...sorted], [i, count[arr[i] - min]]);
-    await wait();
+    await render([...sorted], [i, count[arr[i] as number - min]]);
   }
   return steps;
 };
 
-export const quickSort: Function = async (
-  arr: number[] | number[][],
-  render: Function,
-  wait: Function
-) => {
-  await quickSortLocal(arr, 0, arr.length - 1, render, wait);
+export const quickSort: SortFunc = async (arr, render, isASC) => {
+  await quickSortLocal(arr, 0, arr.length - 1, render);
   return 0;
 };
 
 async function swap(
-  items: number[] | number[][],
+  items: SortArray,
   leftIndex: number,
   rightIndex: number,
-  render: Function,
-  wait: Function
+  render: Function
 ) {
   var temp = items[leftIndex];
   items[leftIndex] = items[rightIndex];
   items[rightIndex] = temp;
-  render([...items], [leftIndex, rightIndex]);
-  await wait();
+  await render([...items], [leftIndex, rightIndex]);
 }
 
 async function swapLocal(
@@ -151,11 +126,10 @@ async function swapLocal(
 }
 
 async function partition(
-  items: number[] | number[][],
+  items: SortArray,
   left: number,
   right: number,
-  render: Function,
-  wait: Function
+  render: RenderFunc,
 ) {
   if (Array.isArray(items[0])) {
     let matrix = [...(items as number[][])];
@@ -172,7 +146,7 @@ async function partition(
       }
       if (i <= j) {
         swapLocal(matrix, i, j);
-        await swap(items, i, j, render, wait); //sawpping two elements
+        await swap(items, i, j, render); //sawpping two elements
         i++;
         j--;
       }
@@ -190,7 +164,7 @@ async function partition(
         j--;
       }
       if (i <= j) {
-        await swap(items, i, j, render, wait); //sawpping two elements
+        await swap(items, i, j, render); //sawpping two elements
         i++;
         j--;
       }
@@ -200,37 +174,26 @@ async function partition(
 }
 
 async function quickSortLocal(
-  items: number[] | Array<number[]>,
+  items: SortArray,
   left: number,
   right: number,
-  render: Function,
-  wait: Function
+  render: RenderFunc,
 ) {
   let index;
   if (items.length > 1 && !isSorted(items, true)) {
-    index = await partition(items, left, right, render, wait); //index returned from partition
+    index = await partition(items, left, right, render); 
     if (left < index - 1) {
-      //more elements on the left side of the pivot
-      await quickSortLocal(items, left, index - 1, render, wait);
+      await quickSortLocal(items, left, index - 1, render);
     }
     if (index < right) {
-      //more elements on the right side of the pivot
-      await quickSortLocal(items, index, right, render, wait);
+      await quickSortLocal(items, index, right, render);
     }
   }
   return items;
 }
 
-/* Iterative javascript program for merge sort */
 
-/*
- * Iterative mergesort function to sor t arr[0...n-1]
- */
-export async function mergeSort(
-  arr: number[],
-  render: Function,
-  wait: Function
-) {
+export const mergeSort: SortFunc = async (arr, render, isASC) => {
   console.log(arr);
   let n = arr.length;
   var curr_size;
@@ -242,7 +205,7 @@ export async function mergeSort(
 
       var mid = Math.min(left_start + curr_size - 1, n - 1);
       var right_end = Math.min(left_start + 2 * curr_size - 1, n - 1);
-      await merge(arr, left_start, mid, right_end, render, wait);
+      await merge(arr, left_start, mid, right_end, render);
     }
   }
   return 0;
@@ -252,12 +215,11 @@ export async function mergeSort(
  * Function to merge the two haves arr[l..m] and arr[m+1..r] of array arr
  */
 async function merge(
-  arr: number[],
+  arr: SortArray,
   l: number,
   m: number,
   r: number,
-  render: Function,
-  wait: Function
+  render: RenderFunc,
 ) {
   var i, j, k;
   var n1 = m - l + 1;
@@ -289,8 +251,7 @@ async function merge(
 
       j++;
     }
-    render([...arr], [i + l, j + r - 1]);
-    await wait();
+    await render([...arr], [i + l, j + r - 1]);
     k++;
   }
 
@@ -299,8 +260,7 @@ async function merge(
    */
   while (i < n1) {
     arr[k] = L[i];
-    render([...arr], [i + l, j + r - 1]);
-    await wait();
+    await render([...arr], [i + l, j + r - 1]);
     i++;
     k++;
   }
@@ -310,8 +270,7 @@ async function merge(
    */
   while (j < n2) {
     arr[k] = R[j];
-    render([...arr], [i + l, j + r - 1]);
-    await wait();
+    await render([...arr], [i + l, j + r - 1]);
     j++;
     k++;
   }

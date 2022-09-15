@@ -1,6 +1,6 @@
 import { findLastIndex } from "./findLastIndex";
 
-// This functions are needed for my university. You can use just random numbers
+// This functions are needed for my university. You can use just random numbers (by choosing "rand" for var)
 
 const getName = async () => {
   const response = await fetch("https://randomuser.me/api/");

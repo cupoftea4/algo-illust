@@ -3,9 +3,7 @@ import { useOutletContext } from "react-router-dom";
 import Graph from "./Graph";
 import styles from "./SortComponent.module.scss";
 import isSorted from "../features/isSorted";
-import { SortArray } from "../types";
-import { promises } from "stream";
-import { SortTypeId } from "../types";
+import { SortArray, SortFunc} from "../types";
 
 type OutletContextType = [
   [SortArray, (array: SortArray) => void],
@@ -16,10 +14,9 @@ type OutletContextType = [
   [number[], (elements: number[]) => void]
 ];
 
-const SortComponent = (sort: Function) => {
+const SortComponent = (sort: SortFunc) => {
   const Component = function () {
     const [timeTaken, setTimeTaken] = useState<number>(0);
-    // const [swappingElements, setSwappingElements] = useState<number[]>([]);
     const [
       arrayState,
       waitDelay,
@@ -42,13 +39,14 @@ const SortComponent = (sort: Function) => {
     const renderChanges = (arr: SortArray, toSwap: number[]) => {
       setArray(arr);
       setSwappingElements(toSwap);
+      return new Promise((resolve) => waitDelay().then(resolve));
     };
 
     const startSorting = (): Promise<SortArray> | undefined => {
       setIsSorting(true);
       return new Promise(async () => {
         const startTime = performance.now();
-        const steps: any = await sort(array, renderChanges, waitDelay, isASC);
+        const steps: any = await sort(array, renderChanges, isASC);
         const sortTime = performance.now() - startTime - steps * delay;
         setTimeTaken(Math.round(sortTime * 100) / 100);
         setSwappingElements([-1]);
