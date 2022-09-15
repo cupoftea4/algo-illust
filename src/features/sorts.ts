@@ -75,8 +75,11 @@ export const shellSort = async (
         render([...arr], [j, j - gap]);
         await wait();
         steps++;
+        console.log(arr);
       }
       arr[j] = temp;
+      console.log(arr);
+      
     }
   }
   return steps;
@@ -87,6 +90,8 @@ export const countingSort = async (
   render: (arr: SortArray, swaps: number[]) => void,
   wait: Function
 ) => {
+  console.log(arr);
+  let steps = 0;
   const len = arr.length;
   const max = Math.max(...arr);
   const min = Math.min(...arr);
@@ -94,20 +99,25 @@ export const countingSort = async (
   for (let i = 0; i < len; i++) {
     count[arr[i] - min]++;
   }
+  console.log(count);
   for (let i = 1; i < count.length; i++) {
     count[i] += count[i - 1];
   }
+  console.log(count);
   const sorted = new Array(len).fill(0);
   for (let i = len - 1; i >= 0; i--) {
     sorted[--count[arr[i] - min]] = arr[i];
+    console.log(count[arr[i] - min], arr[i]);
+    console.log(sorted);
+    steps++;
     render([...sorted], [i, count[arr[i] - min]]);
     await wait();
   }
-  return sorted;
+  return steps;
 };
 
 export const quickSort: Function = async (
-  arr: number[],
+  arr: number[] | number[][],
   render: Function,
   wait: Function
 ) => {
@@ -125,7 +135,6 @@ async function swap(
   var temp = items[leftIndex];
   items[leftIndex] = items[rightIndex];
   items[rightIndex] = temp;
-  //console.log(items);
   render([...items], [leftIndex, rightIndex]);
   await wait();
 }
@@ -168,7 +177,6 @@ async function partition(
         j--;
       }
     }
-
     return i;
   } else {
     var pivot = items[Math.floor((right + left) / 2)]; //middle element
@@ -223,37 +231,17 @@ export async function mergeSort(
   render: Function,
   wait: Function
 ) {
-  // For current size of subarrays to
-  // be merged curr_size varies from
-  // 1 to n/2
   console.log(arr);
   let n = arr.length;
   var curr_size;
-
-  // For picking starting index of
-  // left subarray to be merged
   var left_start;
 
-  // Merge subarrays in bottom up
-  // manner. First merge subarrays
-  // of size 1 to create sorted
-  // subarrays of size 2, then merge
-  // subarrays of size 2 to create
-  // sorted subarrays of size 4, and
-  // so on.
   for (curr_size = 1; curr_size <= n - 1; curr_size = 2 * curr_size) {
-    // Pick starting point of different
-    // subarrays of current size
+
     for (left_start = 0; left_start < n - 1; left_start += 2 * curr_size) {
-      // Find ending point of left
-      // subarray. mid+1 is starting
-      // point of right
+
       var mid = Math.min(left_start + curr_size - 1, n - 1);
-
       var right_end = Math.min(left_start + 2 * curr_size - 1, n - 1);
-
-      // Merge Subarrays arr[left_start...mid]
-      // & arr[mid+1...right_end]
       await merge(arr, left_start, mid, right_end, render, wait);
     }
   }
