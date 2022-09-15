@@ -7,11 +7,10 @@ import { SortArray, SortFunc, HighlightedElements } from "../types";
 
 type OutletContextType = [
   [SortArray, (array: SortArray) => void],
-  () => Promise<void>,
-  boolean,
-  number,
   [boolean, (state: boolean) => void],
-  [HighlightedElements, (elements: HighlightedElements) => void]
+  [HighlightedElements, (elements: HighlightedElements) => void],
+  boolean,
+  number
 ];
 
 const SortComponent = (sort: SortFunc) => {
@@ -20,11 +19,10 @@ const SortComponent = (sort: SortFunc) => {
     const [steps, setSteps] = useState<number>(0);
     const [
       arrayState,
-      waitDelay,
-      isASC,
-      delay,
       isSortingState,
       swappingElementsState,
+      isASC,
+      delay
     ]: OutletContextType = useOutletContext();
     const [isSorting, setIsSorting] = isSortingState;
     const [array, setArray] = arrayState;
@@ -40,7 +38,7 @@ const SortComponent = (sort: SortFunc) => {
     const renderChanges = (arr: SortArray, toSwap: HighlightedElements) => {
       setArray(arr);
       setSwappingElements(toSwap);
-      return new Promise((resolve) => waitDelay().then(resolve));
+      return new Promise((resolve) => setTimeout(resolve, delay));
     };
 
     const startSorting = (): Promise<SortArray> | undefined => {

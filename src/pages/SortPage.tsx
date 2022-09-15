@@ -18,9 +18,6 @@ const SortPage = () => {
   const [variant, setVariant] = useState<number>(0);
   const [illustDelay, setIllustDelay] = useState<number>(250);
 
-  const waitDelay = () =>
-    new Promise((resolve) => setTimeout(resolve, illustDelay));
-
   const onLengthSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (!isSorting) {
@@ -73,11 +70,10 @@ const SortPage = () => {
         <div className={styles.status}>Fetching data...</div> 
       : <Outlet context={[
           [array, setArray],
-          waitDelay,
-          isASC,
-          illustDelay,
           [isSorting, setIsSorting],
-          [swappingElements, setSwappingElements]
+          [swappingElements, setSwappingElements],
+          isASC,
+          illustDelay
         ]} />}
     </>
   );
