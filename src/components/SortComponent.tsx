@@ -3,7 +3,7 @@ import { useOutletContext } from "react-router-dom";
 import Graph from "./Graph";
 import styles from "./SortComponent.module.scss";
 import isSorted from "../features/isSorted";
-import { SortArray, SortFunc} from "../types";
+import { SortArray, SortFunc, HighlightedElements } from "../types";
 
 type OutletContextType = [
   [SortArray, (array: SortArray) => void],
@@ -11,7 +11,7 @@ type OutletContextType = [
   boolean,
   number,
   [boolean, (state: boolean) => void],
-  [number[], (elements: number[]) => void]
+  [HighlightedElements, (elements: HighlightedElements) => void]
 ];
 
 const SortComponent = (sort: SortFunc) => {
@@ -36,7 +36,7 @@ const SortComponent = (sort: SortFunc) => {
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [array]);
 
-    const renderChanges = (arr: SortArray, toSwap: number[]) => {
+    const renderChanges = (arr: SortArray, toSwap: HighlightedElements) => {
       setArray(arr);
       setSwappingElements(toSwap);
       return new Promise((resolve) => waitDelay().then(resolve));
@@ -49,7 +49,7 @@ const SortComponent = (sort: SortFunc) => {
         const steps: any = await sort(array, renderChanges, isASC);
         const sortTime = performance.now() - startTime - steps * delay;
         setTimeTaken(Math.round(sortTime * 100) / 100);
-        setSwappingElements([-1]);
+        setSwappingElements({ sorted: true});
         setIsSorting(false);
       });
     };

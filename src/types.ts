@@ -9,7 +9,16 @@ export type SortTypeId =
 
 export type SortArray = (number | string | number[])[];
 
-export type RenderFunc = (arr: SortArray, highlightedElements: number[]) => Promise<unknown>;
+export type HighlightedElements = {
+  green?: number[];
+  orange?: number[];
+  sorted?: boolean;
+}
+
+export type RenderFunc = (
+  arr: SortArray, 
+  highlightedElements: HighlightedElements
+) => Promise<unknown>;
 
 export type SortFunc = (
   arr: SortArray,

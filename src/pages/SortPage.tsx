@@ -1,7 +1,7 @@
 import NavBar from "../components/NavBar";
 import { Outlet } from "react-router-dom";
 import { useState } from "react";
-import { SortArray, SortTypeId } from "../types";
+import { HighlightedElements, SortArray, SortTypeId } from "../types";
 import styles from "./SortPage.module.scss";
 import generateArray from "../features/generateArray";
 import Params from "../components/Params";
@@ -14,7 +14,7 @@ const SortPage = () => {
   const [isASC, setIsASC] = useState<boolean>(true);
   const [loading, setLoading] = useState<boolean>(false);
   const [isSorting, setIsSorting] = useState<boolean>(false);
-  const [swappingElements, setSwappingElements] = useState<number[]>([]);
+  const [swappingElements, setSwappingElements] = useState<HighlightedElements>({});
   const [variant, setVariant] = useState<number>(0);
   const [illustDelay, setIllustDelay] = useState<number>(250);
 

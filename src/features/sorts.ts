@@ -10,7 +10,7 @@ export const bubbleSort: SortFunc = async (arr, render, isASC) => {
     for (let i = 0; i < len; i++) {
       if ((arr[i] > arr[i + 1] && isASC) || (arr[i] < arr[i + 1] && !isASC)) {
         [arr[i], arr[i + 1]] = [arr[i + 1], arr[i]];
-        await render([...arr], [i, i + 1]);
+        await render([...arr], {green: [i, i + 1]});
         checked = true;
         steps++;
       }
@@ -34,7 +34,7 @@ export const selectionSort: SortFunc = async (arr, render, isASC) => {
     }
     if (i !== control) {
       [arr[i], arr[control]] = [arr[control], arr[i]];
-      await render([...arr], [i, control]);
+      await render([...arr], {green: [i, control]});
       steps++;
     }
   }
@@ -55,7 +55,7 @@ export const shellSort: SortFunc = async (arr, render, isASC) => {
         j -= gap
       ) {
         arr[j] = arr[j - gap];
-        await render([...arr], [j, j - gap]);
+        await render([...arr], {green: [j, j - gap]});
         steps++;
         console.log(arr);
       }
@@ -87,7 +87,6 @@ export const mergeSort: SortFunc = async (arr, render, isASC) => {
   return 0;
 }
 
-
 export const countingSort: SortFunc = async (arr, render, isASC) => {
   if (Array.isArray(arr[0]) || (typeof arr[0] === "string")) {
     alert("Counting sort only works with numbers");
@@ -113,22 +112,20 @@ export const countingSort: SortFunc = async (arr, render, isASC) => {
     console.log(count[arr[i] as number - min], arr[i]);
     console.log(sorted);
     steps++;
-    await render([...sorted], [i, count[arr[i] as number - min]]);
+    await render([...sorted], {green: [i, count[(arr[i] as number) - min]]});
   }
   return steps;
 };
 
-
-const swapWithRender = async (
-  items: SortArray,
-  leftIndex: number,
-  rightIndex: number,
-  render: RenderFunc
-) => {
-  [items[leftIndex], items[rightIndex]] = [items[rightIndex], items[leftIndex]];
-  await render([...items], [leftIndex, rightIndex]);
-}
-
+// const swapWithRender = async (
+//   items: SortArray,
+//   leftIndex: number,
+//   rightIndex: number,
+//   render: RenderFunc
+// ) => {
+//   [items[leftIndex], items[rightIndex]] = [items[rightIndex], items[leftIndex]];
+//   // await render([...items], {green: [leftIndex, rightIndex]});
+// }
 
 async function partition (
   items: SortArray,
@@ -150,15 +147,16 @@ async function partition (
         j--;
       }
       if (i <= j) {
+        // swap
         [matrix[i], matrix[j]] = [matrix[j], matrix[i]];
-        await swapWithRender(items, i, j, render);
-        i++;
-        j--;
+        [items[i], items[j]] = [items[j], items[i]];
+        i++; j--;
       }
     }
     return i;
   } else {
-    const pivot = items[Math.floor((right + left) / 2)]; //middle element
+    const pivotIndex = Math.floor((right + left) / 2);
+    const pivot = items[pivotIndex]; //middle element
     let i = left; //left pointer
     let j = right; //right pointer
     while (i <= j) {
@@ -169,9 +167,9 @@ async function partition (
         j--;
       }
       if (i <= j) {
-        await swapWithRender(items, i, j, render); //sawpping two elements
-        i++;
-        j--;
+        [items[i], items[j]] = [items[j], items[i]];
+        await render([...items], {green: [i, j], orange: [pivotIndex]});
+        i++; j--;
       }
     }
     return i;
@@ -211,9 +209,7 @@ async function merge (
   let leftArray = arr.slice(left, mid + 1);
   let rightArray = arr.slice(mid + 1, right + 1);
 
-  i = 0;
-  j = 0;
-  k = left;
+  i = 0; j = 0; k = left;
   while (i < len1 && j < len2) {
     if (leftArray[i] <= rightArray[j]) {
       arr[k] = leftArray[i];
@@ -228,17 +224,15 @@ async function merge (
   // Copy the remaining elements of L, if there are any
   while (i < len1) {
     arr[k] = leftArray[i];
-    i++;
-    k++;
+    i++; k++;
   }
 
   // Copy the remaining elements of R, if there are any
   while (j < len2) {
     arr[k] = rightArray[j];
-    await render([...arr], [i + left, j + right - 1]);
-    j++;
-    k++;
+    await render([...arr], {green: [i + left, j + right - 1]});
+    j++; k++;
   }
-  await render([...arr], [i + left, j + right - 1]);
+  await render([...arr], {green: [i + left, j + right - 1]});
   console.log(arr);
 }
