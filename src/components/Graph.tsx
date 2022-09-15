@@ -4,8 +4,8 @@ import styles from './Graph.module.scss';
 const Graph = ({ array, swaps } : {array: SortArray, swaps: HighlightedElements}) => {
   const activeColor = "#33c267";
   return (
-    <div className={styles.illustration}>
-      {array.length <= 40 && !Array.isArray(array[0]) ? 
+    <div className={styles.illustration} style={{gap: (array.length >= 40) ? ".1rem" : "1rem"}}>
+      { !Array.isArray(array[0]) ? 
       array.map((item, index) =>
         <div key={index} 
             className={`${styles.arrayItem} ${swaps?.sorted && styles.sorted}`} 
@@ -16,9 +16,9 @@ const Graph = ({ array, swaps } : {array: SortArray, swaps: HighlightedElements}
               ${swaps?.green && swaps.green.includes(index) && styles.green} 
               ${swaps?.orange && swaps.orange.includes(index) && styles.orange}
             `}
-            style={swaps?.sorted ? { transitionDelay: `${index*0.07}s`, backgroundColor: activeColor}: {}}
+            style={swaps?.sorted ? { transitionDelay: (array.length >= 40) ? `${index*0.005}s` : `${index*0.07}s`, backgroundColor: activeColor}: {}}
             >
-          </div>{item}
+          </div>{array.length <= 40 ? item : null}
         </div>
       ) : null}
     </div>

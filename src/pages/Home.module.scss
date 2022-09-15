@@ -1,0 +1,75 @@
+@import url('https://fonts.googleapis.com/css2?family=Literata:opsz@7..72&family=Roboto+Mono:ital,wght@0,400;1,300;1,600&display=swap');
+
+body {
+  color: white;
+}
+
+.central {
+  font-family: 'Literata', serif;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  .tittle {
+    opacity: 0;
+    text-align: center;
+    animation: startApp 1.6s ease-in-out;
+  }
+  .menu {
+    padding: 2rem;
+    transition: all .5s ease-in-out;
+    input {
+      background-color: black;
+      color: white;
+      border: none;
+      border-bottom: 1px solid white;
+      padding: .5rem;
+      margin: .5rem 1rem 1rem 1rem;
+      font-size: 1.2em;
+      width:85%;
+      &:focus {
+        outline: none;
+      }
+    }
+
+  }
+  .items {
+    list-style: none;
+    a {
+      display: block;
+      color: inherit;
+      padding: 0 .2rem;
+    }
+    a:hover, .selected  {
+      transition: all .2s ease-in-out;
+      color: black;
+      background-color: white;
+      border-radius: 5px;
+    }
+
+  } 
+}
+
+.terminalInput{
+  display: flex;
+  align-items: center;
+}
+
+
+@keyframes startApp {
+  0% {
+    opacity: 1;
+    transform: scale(0.6);
+  }
+  30% {
+    transform: scale(1);
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}

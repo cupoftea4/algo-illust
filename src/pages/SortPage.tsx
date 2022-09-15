@@ -1,4 +1,4 @@
-import NavBar from "../components/NavBar";
+import NavBar from "../components/SortNavBar";
 import { Outlet } from "react-router-dom";
 import { useState } from "react";
 import { HighlightedElements, SortArray, SortTypeId } from "../types";
@@ -58,7 +58,7 @@ const SortPage = () => {
                 placeholder="length"
                 type={"number"}
                 defaultValue="10"
-                max={40}
+                max={600}
                 min={2}
               />
             </span>

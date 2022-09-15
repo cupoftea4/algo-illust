@@ -16,6 +16,7 @@ const Params = ({setIllustDelay, setVariant}: ParamsProps) => {
           {Array.from({ length: 12 }, (_, i) => (
             <option key={i} value={3600 / (i + 2)}>{i + 1}</option>
           ))}
+          <option value={40}>extreme</option>
         </select>
         <label htmlFor="illustSpeed">Var:</label>
         <select
