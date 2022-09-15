@@ -1,6 +1,9 @@
 import { SortFunc, SortArray, RenderFunc } from "../types";
 import isSorted from "./isSorted";
 
+let IS_ASC = true;
+let STEPS = 0;
+
 export const bubbleSort: SortFunc = async (arr, render, isASC) => {
   const len = arr.length;
   let steps = 0;
@@ -67,12 +70,14 @@ export const shellSort: SortFunc = async (arr, render, isASC) => {
 };
 
 export const quickSort: SortFunc = async (arr, render, isASC) => {
+  STEPS = 0; IS_ASC = isASC;
   await quickSortLocal(arr, 0, arr.length - 1, render);
-  return 0;
+  return STEPS;
 };
 
 export const mergeSort: SortFunc = async (arr, render, isASC) => {
   console.log(arr);
+  STEPS = 0; IS_ASC = isASC;
   const len = arr.length;
   let currSize;
   let leftStart;
@@ -82,9 +87,10 @@ export const mergeSort: SortFunc = async (arr, render, isASC) => {
       const mid = Math.min(leftStart + currSize - 1, len - 1);
       const rightEnd = Math.min(leftStart + 2 * currSize - 1, len - 1);
       await merge(arr, leftStart, mid, rightEnd, render);
+      STEPS++;
     }
   }
-  return 0;
+  return STEPS;
 }
 
 export const countingSort: SortFunc = async (arr, render, isASC) => {
@@ -107,31 +113,23 @@ export const countingSort: SortFunc = async (arr, render, isASC) => {
   }
   console.log(count);
   const sorted = new Array(len).fill(0);
+  let index;
   for (let i = len - 1; i >= 0; i--) {
-    sorted[--count[arr[i] as number - min]] = arr[i];
+    index = isASC ? (--count[arr[i] as number - min]) : ((len - 1) - (--count[arr[i] as number - min]));
+    sorted[index] = arr[i];
     console.log(count[arr[i] as number - min], arr[i]);
     console.log(sorted);
     steps++;
-    await render([...sorted], {green: [i, count[(arr[i] as number) - min]]});
+    await render([...sorted], {green: [index]});
   }
   return steps;
 };
-
-// const swapWithRender = async (
-//   items: SortArray,
-//   leftIndex: number,
-//   rightIndex: number,
-//   render: RenderFunc
-// ) => {
-//   [items[leftIndex], items[rightIndex]] = [items[rightIndex], items[leftIndex]];
-//   // await render([...items], {green: [leftIndex, rightIndex]});
-// }
 
 async function partition (
   items: SortArray,
   left: number,
   right: number,
-  render: RenderFunc,
+  render: RenderFunc
 ) {
   if (Array.isArray(items[0])) {
     let matrix = [...(items as number[][])];
@@ -160,15 +158,16 @@ async function partition (
     let i = left; //left pointer
     let j = right; //right pointer
     while (i <= j) {
-      while (items[i] < pivot) {
+      while ((IS_ASC && items[i] < pivot) || (!IS_ASC && items[i] > pivot)) {
         i++;
       }
-      while (items[j] > pivot) {
+      while ((IS_ASC && items[j] > pivot) || (!IS_ASC && items[j] < pivot)) {
         j--;
       }
       if (i <= j) {
         [items[i], items[j]] = [items[j], items[i]];
         await render([...items], {green: [i, j], orange: [pivotIndex]});
+        STEPS++;
         i++; j--;
       }
     }
@@ -180,7 +179,7 @@ async function quickSortLocal (
   items: SortArray,
   left: number,
   right: number,
-  render: RenderFunc,
+  render: RenderFunc
 ) {
   let index;
   if (items.length > 1 && !isSorted(items, true)) {
@@ -200,7 +199,7 @@ async function merge (
   left: number,
   mid: number,
   right: number,
-  render: RenderFunc,
+  render: RenderFunc
 ) {
   let i, j, k;
   let len1 = mid - left + 1;
@@ -211,7 +210,7 @@ async function merge (
 
   i = 0; j = 0; k = left;
   while (i < len1 && j < len2) {
-    if (leftArray[i] <= rightArray[j]) {
+    if ((IS_ASC && leftArray[i] <= rightArray[j]) || (!IS_ASC && leftArray[i] > rightArray[j])) {
       arr[k] = leftArray[i];
       i++;
     } else {
@@ -230,7 +229,6 @@ async function merge (
   // Copy the remaining elements of R, if there are any
   while (j < len2) {
     arr[k] = rightArray[j];
-    await render([...arr], {green: [i + left, j + right - 1]});
     j++; k++;
   }
   await render([...arr], {green: [i + left, j + right - 1]});

@@ -17,6 +17,7 @@ type OutletContextType = [
 const SortComponent = (sort: SortFunc) => {
   const Component = function () {
     const [timeTaken, setTimeTaken] = useState<number>(0);
+    const [steps, setSteps] = useState<number>(0);
     const [
       arrayState,
       waitDelay,
@@ -46,8 +47,9 @@ const SortComponent = (sort: SortFunc) => {
       setIsSorting(true);
       return new Promise(async () => {
         const startTime = performance.now();
-        const steps: any = await sort(array, renderChanges, isASC);
-        const sortTime = performance.now() - startTime - steps * delay;
+        const stepsSpent = await sort(array, renderChanges, isASC);
+        const sortTime = performance.now() - startTime - stepsSpent * delay;
+        setSteps(stepsSpent);
         setTimeTaken(Math.round(sortTime * 100) / 100);
         setSwappingElements({ sorted: true});
         setIsSorting(false);
@@ -59,7 +61,7 @@ const SortComponent = (sort: SortFunc) => {
         <div className={styles.container}>
           <Graph array={array} swaps={swappingElements} />
         </div>
-        <span className={styles.time}>Time taken {timeTaken}ms.</span>
+        <span className={styles.time}>Steps: {steps}. Time taken {timeTaken}ms.</span>
       </>
     );
   };
