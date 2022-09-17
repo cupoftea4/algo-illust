@@ -23,8 +23,11 @@
             &:hover {
                 background-color: $dark-primary-clr;
             }
-            &.swapping {
+            &.green {
                 background-color: $active-clr;
+            }
+            &.orange {
+                background-color: $orange-clr;
             }
         }
     }

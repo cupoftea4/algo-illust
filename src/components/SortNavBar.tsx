@@ -28,7 +28,7 @@ const NavBar = ({type, setType}: NavBarProps) => {
         {sorts.map(sort => (
           <Link
             key={sort.id}
-            to={'/' + sort.id}
+            to={'/sort/' + sort.id}
             className={`${type === sort.id && styles.textSelected}`}
             onClick={() => setType(sort.id)}
           >
@@ -36,7 +36,6 @@ const NavBar = ({type, setType}: NavBarProps) => {
             {sort.name}
           </Link>
         ))}
-
       </nav>      
   );
 };
