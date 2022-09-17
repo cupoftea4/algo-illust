@@ -18,7 +18,7 @@ export const bubbleSort: SortFunc = async (arr, render, isASC) => {
         steps++;
         
       }
-      if(i === len - 1) render([...arr], {green: [i, i + 1]});
+      if(i === len - 1) render([...arr]);
     }
   } while (checked);
   return steps;
@@ -38,42 +38,38 @@ export const selectionSort: SortFunc = async (arr, render, isASC) => {
       }
     }
     if (i !== control) {
-      await render([...arr], {green: [i, control]});
+      await render([...arr], {green: [i], orange: [control]});
       [arr[i], arr[control]] = [arr[control], arr[i]];
       steps++;
       console.log(arr);
       
     }
-    if(i === len - 1) render([...arr], {green: [i, control]});
+    if(i === len - 1) render([...arr]);
 
   }
   return steps;
 };
 
 export const shellSort: SortFunc = async (arr, render, isASC) => {
-  const len = arr.length;
-  let steps = 0;
-  for (let gap = Math.floor(len / 2); gap > 0; gap = Math.floor(gap / 2)) {
-    for (let i = gap; i < len; i++) {
-      let temp = arr[i];
-      let j;
-      for (
-        j = i;
-        j >= gap &&
-        ((arr[j - gap] > temp && isASC) || (arr[j - gap] < temp && !isASC));
-        j -= gap
-      ) {
-        arr[j] = arr[j - gap];
-        await render([...arr], {green: [j, j - gap]});
-        steps++;
-        console.log(arr);
+  STEPS = 0;
+  for (
+    let gap = Math.floor(arr.length / 2);
+    gap > 0;
+    gap = Math.floor(gap / 2)
+  ) {
+    for (let j = gap; j < arr.length; j++) {
+      for (let i = j - gap; i >= 0; i -= gap) {
+        if (isASC && arr[i + gap] < arr[i] || !isASC && arr[i + gap] > arr[i]) {
+          await render([...arr], {green: [i, i + gap]});
+          [arr[i + gap], arr[i]] = [arr[i], arr[i + gap]];
+          STEPS++;
+        } else break;
       }
-      arr[j] = temp;
-      console.log(arr);
     }
   }
-  return steps;
-};
+  await render([...arr]);
+  return STEPS;
+}
 
 export const quickSort: SortFunc = async (arr, render, isASC) => {
   STEPS = 0; IS_ASC = isASC;

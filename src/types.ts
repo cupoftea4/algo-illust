@@ -17,7 +17,7 @@ export type HighlightedElements = {
 
 export type RenderFunc = (
   arr: SortArray, 
-  highlightedElements: HighlightedElements
+  highlightedElements?: HighlightedElements
 ) => Promise<unknown>;
 
 export type SortFunc = (

@@ -31,6 +31,7 @@ const NavBar = ({type, setType}: NavBarProps) => {
             to={'/sort/' + sort.id}
             className={`${type === sort.id && styles.textSelected}`}
             onClick={() => setType(sort.id)}
+            title={sort.name}
           >
             <div className={`${type === sort.id && styles.selected}`}></div>
             {sort.name}

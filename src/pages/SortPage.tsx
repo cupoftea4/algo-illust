@@ -66,7 +66,7 @@ const SortPage = () => {
                 min={2}
               />
             </span>
-            <input type="submit" value="Run" />
+            <input type="submit" value="Run" title="Start sorting" />
           </form>
         </span>
       </div>

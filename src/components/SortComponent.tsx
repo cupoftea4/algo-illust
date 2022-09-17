@@ -35,9 +35,9 @@ const SortComponent = (sort: SortFunc) => {
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [array]);
 
-    const renderChanges = (arr: SortArray, toSwap: HighlightedElements) => {
+    const renderChanges = (arr: SortArray, toSwap?: HighlightedElements) => {
       setArray(arr);
-      setSwappingElements(toSwap);
+      setSwappingElements(toSwap || {});
       return new Promise((resolve) => setTimeout(resolve, delay));
     };
 
