@@ -9,3 +9,19 @@ body {
   background-color: $secondary-clr;
   height: 100vh;
 }
+
+
+// Making the bottom part take up the rest of the screen
+#root {
+  display: flex;
+  flex-flow: column;
+  height: 100%;
+}
+
+#root > :nth-child(1) {
+  flex: 0 1 auto;
+}
+
+#root > :nth-child(2) {
+  flex: 1 1 auto;
+}
