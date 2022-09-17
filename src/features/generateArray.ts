@@ -40,8 +40,8 @@ const generateArray = async (length: number, variant: number) => {
         { length },
         () => Math.floor(Math.random() * 1000) / 10
       );
-      const arrayEven = array.filter((el) => el % 2 === 0);
-      const arrayWithSqrt = arrayEven.map((el) => Math.sqrt(Math.abs(el - 10)));
+      const arrayEven = array.filter(el => ((el * 10 % 10 === 0) ? el : el * 10 % 2) === 0);
+      const arrayWithSqrt = arrayEven.map((el) => Math.round(Math.sqrt(Math.abs(el - 10)) * 10) / 10) ;
       return arrayWithSqrt;
     case 4:
       // mb later
@@ -123,7 +123,7 @@ const generateArray = async (length: number, variant: number) => {
       return arrayWithMin;
     case 17:
       const arrayWithTg = array.map((item) =>
-        item % 2 === 0 ? Math.tan(item) - item : Math.abs(item)
+        Math.round(item % 2 === 0 ? Math.tan(item) - item : Math.abs(item) * 100) / 100
       );
       return arrayWithTg;
   }
