@@ -8,14 +8,17 @@ export const bubbleSort: SortFunc = async (arr, render, isASC) => {
   const len = arr.length;
   let steps = 0;
   let checked;
-  do {
-    checked = false;
-    for (let i = 0; i < len; i++) {
-      if ((arr[i] > arr[i + 1] && isASC) || (arr[i] < arr[i + 1] && !isASC)) {
-        [arr[i], arr[i + 1]] = [arr[i + 1], arr[i]];
-        await render([...arr], {green: [i, i + 1]});
-        checked = true;
-        steps++;
+    do {
+      checked = false;
+      for (let i = 0; i < len; i++) {
+        if ((arr[i] > arr[i + 1] && isAsc) || (arr[i] < arr[i + 1] && !isAsc)) {
+          await render([...arr], {green: [i, i + 1]});      
+          [arr[i], arr[i + 1]] = [arr[i + 1], arr[i]];
+          checked = true;
+          steps++;
+          
+        }
+        if(i === len - 1) render([...arr], [i, i + 1]);
       }
     }
   } while (checked);
@@ -36,10 +39,14 @@ export const selectionSort: SortFunc = async (arr, render, isASC) => {
       }
     }
     if (i !== control) {
-      [arr[i], arr[control]] = [arr[control], arr[i]];
       await render([...arr], {green: [i, control]});
+      [arr[i], arr[control]] = [arr[control], arr[i]];
       steps++;
+      console.log(arr);
+      
     }
+    if(i === len - 1) render([...arr], [i, i]);
+
   }
   return steps;
 };
