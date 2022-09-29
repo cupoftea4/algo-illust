@@ -1,6 +1,6 @@
 import { findLastIndex } from "./findLastIndex";
 
-// This functions are needed for my university. You can use just random numbers
+// This functions are needed for my university. You can use just random numbers (by choosing "rand" for var)
 
 const getName = async () => {
   const response = await fetch("https://randomuser.me/api/");
@@ -40,8 +40,8 @@ const generateArray = async (length: number, variant: number) => {
         { length },
         () => Math.floor(Math.random() * 1000) / 10
       );
-      const arrayEven = array.filter((el) => el % 2 === 0);
-      const arrayWithSqrt = arrayEven.map((el) => Math.sqrt(Math.abs(el - 10)));
+      const arrayEven = array.filter(el => ((el * 10 % 10 === 0) ? el : el * 10 % 2) === 0);
+      const arrayWithSqrt = arrayEven.map((el) => Math.round(Math.sqrt(Math.abs(el - 10)) * 10) / 10) ;
       return arrayWithSqrt;
     case 4:
       // mb later
@@ -60,12 +60,11 @@ const generateArray = async (length: number, variant: number) => {
           (Math.floor(Math.random() * 10) % 2 === 0 ? 1 : -1)
       );
       console.log("Array: ", array);
-      const firstNegative = array.findIndex((el) => el < 0) | 0;
-      const lastNegative = findLastIndex(array, (el) => el < 0) | 1;
-      const resultArray = array.slice(
-        array.indexOf(firstNegative) + 1,
-        array.lastIndexOf(lastNegative)
-      );
+      const firstNegative = array.findIndex((el) => el < 0) || 0;
+      const lastNegative = findLastIndex(array, (el) => el < 0) || 1;
+      console.log("First negative: ", firstNegative);
+      console.log("Last negative: ", lastNegative);
+      const resultArray = array.slice(firstNegative + 1, lastNegative); 
       console.log("Sliced array: ", resultArray);
       return resultArray;
     case 10:
@@ -100,7 +99,7 @@ const generateArray = async (length: number, variant: number) => {
       );
       const arrayWithoutMultiples = array.filter((item) => item % 3 !== 0);
       console.log("Array without multiples: ", arrayWithoutMultiples);
-      const arrayWithPower2 = arrayWithoutMultiples.map((item) => item * item);
+      const arrayWithPower2 = arrayWithoutMultiples.map((item) => Math.floor((item) * (item) * 100) / 100);
       console.log("Array with power 2: ", arrayWithPower2);
       return arrayWithPower2;
     case 14:
@@ -124,7 +123,7 @@ const generateArray = async (length: number, variant: number) => {
       return arrayWithMin;
     case 17:
       const arrayWithTg = array.map((item) =>
-        item % 2 === 0 ? Math.tan(item) - item : Math.abs(item)
+        Math.round(item % 2 === 0 ? Math.tan(item) - item : Math.abs(item) * 100) / 100
       );
       return arrayWithTg;
   }

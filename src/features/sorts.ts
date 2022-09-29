@@ -1,160 +1,138 @@
-import { SortArray, SortTypeId } from "../types";
+import { RenderFunc, SortArray, SortFunc } from "../types";
+
 import isSorted from "./isSorted";
 
-export const bubbleSort = async (
-  arr: SortArray,
-  render: (arr: SortArray, swaps: number[]) => void,
-  wait: Function,
-  isAsc: boolean
-) => {
+let IS_ASC = true;
+let STEPS = 0;
+
+export const bubbleSort: SortFunc = async (arr, render, isASC) => {
   const len = arr.length;
   let steps = 0;
   let checked;
   do {
     checked = false;
     for (let i = 0; i < len; i++) {
-      if ((arr[i] > arr[i + 1] && isAsc) || (arr[i] < arr[i + 1] && !isAsc)) {
+      if ((arr[i] > arr[i + 1] && isASC) || (arr[i] < arr[i + 1] && !isASC)) {
+        await render([...arr], {green: [i, i + 1]});      
         [arr[i], arr[i + 1]] = [arr[i + 1], arr[i]];
-        render([...arr], [i, i + 1]);
-        await wait();
         checked = true;
         steps++;
+        
       }
+      if(i === len - 1) render([...arr]);
     }
   } while (checked);
   return steps;
 };
 
-export const selectionSort = async (
-  arr: SortArray,
-  render: (arr: SortArray, swaps: number[]) => void,
-  wait: Function,
-  isAsc: boolean
-) => {
+export const selectionSort: SortFunc = async (arr, render, isASC) => {
   const len = arr.length;
   let steps = 0;
   for (let i = 0; i < len; i++) {
     let control = i;
     for (let j = i + 1; j < len; j++) {
       if (
-        (arr[j] < arr[control] && isAsc) ||
-        (arr[j] > arr[control] && !isAsc)
+        (arr[j] < arr[control] && isASC) ||
+        (arr[j] > arr[control] && !isASC)
       ) {
         control = j;
       }
     }
     if (i !== control) {
+      await render([...arr], {green: [i], orange: [control]});
       [arr[i], arr[control]] = [arr[control], arr[i]];
-      render([...arr], [i, control]);
-      await wait();
       steps++;
-    }
-  }
-  return steps;
-};
-
-export const shellSort = async (
-  arr: SortArray,
-  render: (arr: SortArray, swaps: number[]) => void,
-  wait: Function,
-  isAsc: boolean
-) => {
-  const len = arr.length;
-  let steps = 0;
-  for (let gap = Math.floor(len / 2); gap > 0; gap = Math.floor(gap / 2)) {
-    for (let i = gap; i < len; i++) {
-      let temp = arr[i];
-      let j;
-      for (
-        j = i;
-        j >= gap &&
-        ((arr[j - gap] > temp && isAsc) || (arr[j - gap] < temp && !isAsc));
-        j -= gap
-      ) {
-        arr[j] = arr[j - gap];
-
-        render([...arr], [j, j - gap]);
-        await wait();
-        console.log(arr);
-        steps++;
-      }
-      arr[j] = temp;
       console.log(arr);
-      render([...arr], []);
-      await wait();
+      
     }
+    if(i === len - 1) render([...arr]);
+
   }
   return steps;
 };
 
-export const countingSort = async (
-  arr: number[],
-  render: (arr: SortArray, swaps: number[]) => void,
-  wait: Function
-) => {
+export const shellSort: SortFunc = async (arr, render, isASC) => {
+  STEPS = 0;
+  for (
+    let gap = Math.floor(arr.length / 2);
+    gap > 0;
+    gap = Math.floor(gap / 2)
+  ) {
+    for (let j = gap; j < arr.length; j++) {
+      for (let i = j - gap; i >= 0; i -= gap) {
+        if (isASC && arr[i + gap] < arr[i] || !isASC && arr[i + gap] > arr[i]) {
+          await render([...arr], {green: [i, i + gap]});
+          [arr[i + gap], arr[i]] = [arr[i], arr[i + gap]];
+          STEPS++;
+        } else break;
+      }
+    }
+  }
+  await render([...arr]);
+  return STEPS;
+}
+
+export const quickSort: SortFunc = async (arr, render, isASC) => {
+  STEPS = 0; IS_ASC = isASC;
+  await quickSortLocal(arr, 0, arr.length - 1, render);
+  return STEPS;
+};
+
+export const mergeSort: SortFunc = async (arr, render, isASC) => {
+  console.log(arr);
+  STEPS = 0; IS_ASC = isASC;
   const len = arr.length;
-  const max = Math.max(...arr);
-  const min = Math.min(...arr);
+  let currSize;
+  let leftStart;
+
+  for (currSize = 1; currSize <= len - 1; currSize = 2 * currSize) {
+    for (leftStart = 0; leftStart < len - 1; leftStart += 2 * currSize) {
+      const mid = Math.min(leftStart + currSize - 1, len - 1);
+      const rightEnd = Math.min(leftStart + 2 * currSize - 1, len - 1);
+      await merge(arr, leftStart, mid, rightEnd, render);
+      STEPS++;
+    }
+  }
+  return STEPS;
+}
+
+export const countingSort: SortFunc = async (arr, render, isASC) => {
+  if (Array.isArray(arr[0]) || (typeof arr[0] === "string")) {
+    alert("Counting sort only works with numbers");
+    throw new Error("Counting sort can only be used with numbers");
+  }
+  console.log(arr);
+  let steps = 0;
+  const len = arr.length;
+  const max = Math.max(...arr as number[]);
+  const min = Math.min(...arr as number[]);
   const count = new Array(max - min + 1).fill(0);
   for (let i = 0; i < len; i++) {
-    count[arr[i] - min]++;
+    count[arr[i] as number - min]++;
   }
+  console.log(count);
   for (let i = 1; i < count.length; i++) {
     count[i] += count[i - 1];
   }
+  console.log(count);
   const sorted = new Array(len).fill(0);
+  let index;
   for (let i = len - 1; i >= 0; i--) {
-    sorted[--count[arr[i] - min]] = arr[i];
-    render([...sorted], [i, count[arr[i] - min]]);
+    index = isASC ? (--count[arr[i] as number - min]) : ((len - 1) - (--count[arr[i] as number - min]));
+    sorted[index] = arr[i];
+    console.log(count[arr[i] as number - min], arr[i]);
     console.log(sorted);
-
-    await wait();
+    steps++;
+    await render([...sorted], {green: [index]});
   }
-  return sorted;
+  return steps;
 };
 
-export const quickSort: Function = async (
-  arr: number[],
-  render: Function,
-  wait: Function
-) => {
-  console.log(arr);
-  await quickSortLocal(arr, 0, arr.length - 1, render, wait);
-  return 0;
-};
-
-async function swap(
-  items: number[] | number[][],
-  leftIndex: number,
-  rightIndex: number,
-  render: Function,
-  wait: Function
-) {
-  var temp = items[leftIndex];
-  items[leftIndex] = items[rightIndex];
-  items[rightIndex] = temp;
-  console.log(items);
-  render([...items], [leftIndex, rightIndex]);
-  await wait();
-}
-
-async function swapLocal(
-  items: number[] | number[][],
-  leftIndex: number,
-  rightIndex: number
-) {
-  var temp = items[leftIndex];
-  items[leftIndex] = items[rightIndex];
-  items[rightIndex] = temp;
-  console.log(items);
-}
-
-async function partition(
-  items: number[] | number[][],
+async function partition (
+  items: SortArray,
   left: number,
   right: number,
-  render: Function,
-  wait: Function
+  render: RenderFunc
 ) {
   if (Array.isArray(items[0])) {
     let matrix = [...(items as number[][])];
@@ -169,172 +147,92 @@ async function partition(
         j--;
       }
       if (i <= j) {
-        swapLocal(matrix, i, j);
-        await swap(items, i, j, render, wait); //sawpping two elements
-        i++;
-        j--;
+        // swap
+        [matrix[i], matrix[j]] = [matrix[j], matrix[i]];
+        [items[i], items[j]] = [items[j], items[i]];
+        i++; j--;
       }
     }
-
     return i;
   } else {
-    var pivot = items[Math.floor((right + left) / 2)]; //middle element
-    console.log(pivot);
-
+    const pivotIndex = Math.floor((right + left) / 2);
+    const pivot = items[pivotIndex]; //middle element
     let i = left; //left pointer
     let j = right; //right pointer
     while (i <= j) {
-      while (items[i] < pivot) {
+      while ((IS_ASC && items[i] < pivot) || (!IS_ASC && items[i] > pivot)) {
         i++;
       }
-      while (items[j] > pivot) {
+      while ((IS_ASC && items[j] > pivot) || (!IS_ASC && items[j] < pivot)) {
         j--;
       }
       if (i <= j) {
-        await swap(items, i, j, render, wait); //sawpping two elements
-        i++;
-        j--;
+        [items[i], items[j]] = [items[j], items[i]];
+        await render([...items], {green: [i, j], orange: [pivotIndex]});
+        STEPS++;
+        i++; j--;
       }
     }
     return i;
   }
 }
 
-async function quickSortLocal(
-  items: number[] | Array<number[]>,
+async function quickSortLocal (
+  items: SortArray,
   left: number,
   right: number,
-  render: Function,
-  wait: Function
+  render: RenderFunc
 ) {
   let index;
   if (items.length > 1 && !isSorted(items, true)) {
-    index = await partition(items, left, right, render, wait); //index returned from partition
+    index = await partition(items, left, right, render);
     if (left < index - 1) {
-      //more elements on the left side of the pivot
-      await quickSortLocal(items, left, index - 1, render, wait);
+      await quickSortLocal(items, left, index - 1, render);
     }
     if (index < right) {
-      //more elements on the right side of the pivot
-      await quickSortLocal(items, index, right, render, wait);
+      await quickSortLocal(items, index, right, render);
     }
   }
   return items;
 }
 
-/* Iterative javascript program for merge sort */
-
-/*
- * Iterative mergesort function to sor t arr[0...n-1]
- */
-export async function mergeSort(
-  arr: number[],
-  render: Function,
-  wait: Function
+async function merge (
+  arr: SortArray,
+  left: number,
+  mid: number,
+  right: number,
+  render: RenderFunc
 ) {
-  // For current size of subarrays to
-  // be merged curr_size varies from
-  // 1 to n/2
-  console.log(arr);
-  let n = arr.length;
-  var curr_size;
+  let i, j, k;
+  let len1 = mid - left + 1;
+  let len2 = right - mid;
 
-  // For picking starting index of
-  // left subarray to be merged
-  var left_start;
+  let leftArray = arr.slice(left, mid + 1);
+  let rightArray = arr.slice(mid + 1, right + 1);
 
-  // Merge subarrays in bottom up
-  // manner. First merge subarrays
-  // of size 1 to create sorted
-  // subarrays of size 2, then merge
-  // subarrays of size 2 to create
-  // sorted subarrays of size 4, and
-  // so on.
-  for (curr_size = 1; curr_size <= n - 1; curr_size = 2 * curr_size) {
-    // Pick starting point of different
-    // subarrays of current size
-    for (left_start = 0; left_start < n - 1; left_start += 2 * curr_size) {
-      // Find ending point of left
-      // subarray. mid+1 is starting
-      // point of right
-      var mid = Math.min(left_start + curr_size - 1, n - 1);
-
-      var right_end = Math.min(left_start + 2 * curr_size - 1, n - 1);
-
-      // Merge Subarrays arr[left_start...mid]
-      // & arr[mid+1...right_end]
-      await merge(arr, left_start, mid, right_end, render, wait);
-    }
-  }
-  return 0;
-}
-
-/*
- * Function to merge the two haves arr[l..m] and arr[m+1..r] of array arr
- */
-async function merge(
-  arr: number[],
-  l: number,
-  m: number,
-  r: number,
-  render: Function,
-  wait: Function
-) {
-  var i, j, k;
-  var n1 = m - l + 1;
-  var n2 = r - m;
-
-  /* create temp arrays */
-  var L = Array(n1).fill(0);
-  var R = Array(n2).fill(0);
-
-  /*
-   * Copy data to temp arrays L and R
-   */
-  for (i = 0; i < n1; i++) L[i] = arr[l + i];
-  for (j = 0; j < n2; j++) R[j] = arr[m + 1 + j];
-
-  /*
-   * Merge the temp arrays back into arr[l..r]
-   */
-  i = 0;
-  j = 0;
-  k = l;
-  while (i < n1 && j < n2) {
-    if (L[i] <= R[j]) {
-      arr[k] = L[i];
-
+  i = 0; j = 0; k = left;
+  while (i < len1 && j < len2) {
+    if ((IS_ASC && leftArray[i] <= rightArray[j]) || (!IS_ASC && leftArray[i] > rightArray[j])) {
+      arr[k] = leftArray[i];
       i++;
     } else {
-      arr[k] = R[j];
-
+      arr[k] = rightArray[j];
       j++;
     }
-    render([...arr], [i + l, j + r - 1]);
-    await wait();
     k++;
   }
 
-  /*
-   * Copy the remaining elements of L, if there are any
-   */
-  while (i < n1) {
-    arr[k] = L[i];
-    render([...arr], [i + l, j + r - 1]);
-    await wait();
-    i++;
-    k++;
+  // Copy the remaining elements of L, if there are any
+  while (i < len1) {
+    arr[k] = leftArray[i];
+    i++; k++;
   }
 
-  /*
-   * Copy the remaining elements of R, if there are any
-   */
-  while (j < n2) {
-    arr[k] = R[j];
-    render([...arr], [i + l, j + r - 1]);
-    await wait();
-    j++;
-    k++;
+  // Copy the remaining elements of R, if there are any
+  while (j < len2) {
+    arr[k] = rightArray[j];
+    j++; k++;
   }
+  await render([...arr], {green: [i + left, j + right - 1]});
   console.log(arr);
 }
