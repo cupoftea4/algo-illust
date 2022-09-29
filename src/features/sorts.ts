@@ -72,11 +72,16 @@ export const shellSort = async (
         j -= gap
       ) {
         arr[j] = arr[j - gap];
+
         render([...arr], [j, j - gap]);
         await wait();
+        console.log(arr);
         steps++;
       }
       arr[j] = temp;
+      console.log(arr);
+      render([...arr], []);
+      await wait();
     }
   }
   return steps;
@@ -101,6 +106,8 @@ export const countingSort = async (
   for (let i = len - 1; i >= 0; i--) {
     sorted[--count[arr[i] - min]] = arr[i];
     render([...sorted], [i, count[arr[i] - min]]);
+    console.log(sorted);
+
     await wait();
   }
   return sorted;
@@ -111,6 +118,7 @@ export const quickSort: Function = async (
   render: Function,
   wait: Function
 ) => {
+  console.log(arr);
   await quickSortLocal(arr, 0, arr.length - 1, render, wait);
   return 0;
 };
@@ -125,7 +133,7 @@ async function swap(
   var temp = items[leftIndex];
   items[leftIndex] = items[rightIndex];
   items[rightIndex] = temp;
-  //console.log(items);
+  console.log(items);
   render([...items], [leftIndex, rightIndex]);
   await wait();
 }
@@ -151,7 +159,6 @@ async function partition(
   if (Array.isArray(items[0])) {
     let matrix = [...(items as number[][])];
     let pivot = matrix[Math.floor((right + left) / 2)][0]; //middle elemen
-    console.log(pivot);
     let i = left; //left pointer
     let j = right; //right pointer
     while (i <= j) {
@@ -172,6 +179,8 @@ async function partition(
     return i;
   } else {
     var pivot = items[Math.floor((right + left) / 2)]; //middle element
+    console.log(pivot);
+
     let i = left; //left pointer
     let j = right; //right pointer
     while (i <= j) {
