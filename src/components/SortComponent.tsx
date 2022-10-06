@@ -51,7 +51,7 @@ const SortComponent = (sort: SortFunc) => {
         <div className={styles.container}>
           <Graph array={array} swaps={swappingElements} />
         </div>
-        <span className={styles.time}>Steps: {steps}. Time taken {timeTaken}ms.</span>
+        <span className={styles.status}>Steps: {steps}. Time taken {timeTaken}ms.</span>
       </>
     );
   };
