@@ -3,6 +3,7 @@ import './index.scss';
 import App from './App';
 
 /* TO DO:
+  - style SortsTable component
   - add a button to reset the array if possible
   - do something with inline styles
   ✓ fix two same lenghts in a row not working
