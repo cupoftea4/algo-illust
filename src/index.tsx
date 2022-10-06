@@ -4,6 +4,7 @@ import App from './App';
 
 /* TO DO:
   - style SortsTable component
+  - probably cleanup somehow brenchmark worker?
   - add a button to reset the array if possible
   - do something with inline styles
   ✓ fix two same lenghts in a row not working
