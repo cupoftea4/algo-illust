@@ -94,7 +94,7 @@ const generateArray = async (length: number, variant: number) => {
       array = Array.from(
         { length },
         () =>
-          Math.floor(Math.random() * 100) / 10 *
+          Math.floor(Math.random() * 10) *
           (Math.floor(Math.random() * 2) === 1 ? 1 : -1)
       );
       const arrayWithoutMultiples = array.filter((item) => item % 3 !== 0);

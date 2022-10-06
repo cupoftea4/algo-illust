@@ -1,4 +1,4 @@
-import { SortFunc, SortArray, RenderFunc } from "./types";
+import { SortFunc, SortArray, RenderFunc } from "../utils/types";
 import isSorted from "./isSorted";
 
 let IS_ASC = true;
@@ -143,7 +143,6 @@ async function partition (
   if (Array.isArray(items[0])) {
     let matrix = [...(items as number[][])];
     let pivot = matrix[Math.floor((right + left) / 2)][0]; //middle elemen
-    console.log(pivot);
     let i = left; //left pointer
     let j = right; //right pointer
     while (i <= j) {
