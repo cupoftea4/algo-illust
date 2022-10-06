@@ -1,21 +1,22 @@
 import NavBar from "../components/SortNavBar";
 import { Outlet } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { HighlightedElements, SortArray, SortTypeId } from "../types";
+import { HighlightedElements, SortArray, SortTypeId } from "../utils/types";
 import styles from "./SortPage.module.scss";
-import generateArray from "../features/generateArray";
+import generateArray from "../utils/generateArray";
 import Params from "../components/Params";
+import SizeForm from "../components/SizeForm";
 
 
 const SortPage = () => {
   const [array, setArray] = useState<SortArray>([]);
+  const [swappingElements, setSwappingElements] = useState<HighlightedElements>({});
+  const [illustDelay, setIllustDelay] = useState<number>(250);
   const [sortType, setSortType] = useState<SortTypeId>('bubble');
   const [isASC, setIsASC] = useState<boolean>(true);
   const [loading, setLoading] = useState<boolean>(false);
   const [isSorting, setIsSorting] = useState<boolean>(false);
-  const [swappingElements, setSwappingElements] = useState<HighlightedElements>({});
   const [variant, setVariant] = useState<number>(0);
-  const [illustDelay, setIllustDelay] = useState<number>(250);
   
   useEffect(() => {
     const href = window.location.href.split("/").pop() as SortTypeId;
@@ -30,7 +31,7 @@ const SortPage = () => {
       setLoading(true);
       const array = await generateArray(length, variant);
       setLoading(false);
-      setArray(array as SortArray);      
+      setArray(array as SortArray);
     } else {
       alert("Please wait for the current sorting to finish.");
     }
@@ -54,20 +55,7 @@ const SortPage = () => {
         </span>
 
         <span className={styles.params}>
-          <form onSubmit={onLengthSubmit}>
-            <span>
-              <label htmlFor="arrayLength">Array Length:</label>
-              <input
-                name="arrayLength"
-                placeholder="length"
-                type={"number"}
-                defaultValue="10"
-                max={600}
-                min={2}
-              />
-            </span>
-            <input type="submit" value="Run" title="Start sorting" />
-          </form>
+            <SizeForm onLengthSubmit={onLengthSubmit} />
         </span>
       </div>
       {loading ?

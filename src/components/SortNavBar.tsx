@@ -1,11 +1,6 @@
 import { Link } from "react-router-dom";
-import { SortTypeId } from "../types";
+import { SortType, SortTypeId } from "../utils/types";
 import styles from './NavBar.module.scss';
-
-type SortType = {
-  id: SortTypeId;
-  name: string;
-}
 
 type NavBarProps = {
   type: SortTypeId;
@@ -20,7 +15,8 @@ const NavBar = ({type, setType}: NavBarProps) => {
     {id: 'shell', name: 'Shell Sort'},
     {id: 'merge', name: 'Merge Sort'},
     {id: 'quick', name: 'Quick Sort'},
-    {id: 'counting', name: 'Counting Sort'}
+    {id: 'counting', name: 'Counting Sort'},
+    {id: 'compare', name: 'Comparison'}
   ];
 
   return (

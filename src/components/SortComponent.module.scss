@@ -1,4 +1,4 @@
-@import "../variables.scss";
+@use '../styles/variables' as *;
 
 .container {
   display: flex;
@@ -6,7 +6,7 @@
   justify-content: center;
 }
 
-.time {
+.status {
   color: $primary-clr;
   font-size: 1rem;
   width: 100%;

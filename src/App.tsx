@@ -9,8 +9,9 @@ import {
   countingSort,
   quickSort,
   mergeSort,
-} from "./features/sorts";
+} from "./utils/sorts";
 import Home from "./pages/Home";
+import SortsTable from "./components/SortsTable";
 // import {withRouter} from 'react-router-dom'
 
 function App() {
@@ -34,6 +35,7 @@ function App() {
             <Route path="quick" element={<QuickSort />} />
             <Route path="counting" element={<CountingSort />} />
           </Route>
+          <Route path="sort/compare" element={<SortsTable />} />
           <Route path="ds/" element={<div>ds</div>} >
             <Route path="linked-list" element={<div>linked-list</div>} />
             <Route path="stack" element={<div>stack</div>} />

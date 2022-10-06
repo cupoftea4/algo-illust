@@ -1,10 +1,10 @@
-import { SortArray } from "../types";
+import { SortArray } from "./types";
 
 function isSorted(arr: SortArray, asc: boolean): boolean {
   if (Array.isArray(arr[0])) {
     let tempArr = [];
     for (let index = 0; index < arr.length; index++) {
-      let element: number[] = <number[]>arr[index];
+      let element: number[] = arr[index] as number[];
       tempArr.push(element[0]);
     }
     const len = tempArr.length;

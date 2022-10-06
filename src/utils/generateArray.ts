@@ -116,14 +116,20 @@ const generateArray = async (length: number, variant: number) => {
       console.log("Matrix: ", matrix);
       return matrix;
     case 16:
+      array = Array.from(
+        { length },
+        () =>
+          (Math.round(Math.random() * 100) / 10) *
+          (Math.floor(Math.random() * 10) % 2 === 0 ? 1 : -1)
+      );
       const minEl = Math.min(...array);
       const arrayWithMin = array.map((item) =>
-        item < 0 ? item * minEl : item
+        Math.round((item < 0 ? item * minEl : item ) * 10) / 10
       );
       return arrayWithMin;
     case 17:
       const arrayWithTg = array.map((item) =>
-        Math.round(item % 2 === 0 ? Math.tan(item) - item : Math.abs(item) * 100) / 100
+        Math.round(item % 2 === 0 ? Math.tan(item) - item : Math.abs(item) * 10) / 10
       );
       return arrayWithTg;
   }

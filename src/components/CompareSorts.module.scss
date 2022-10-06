@@ -1,0 +1,42 @@
+@import "../styles/variables";
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.table {
+  border-collapse: collapse;
+  width: 80%;
+  max-width: 40rem;
+  margin: 1rem auto;
+  border: 1px solid #ddd;
+  padding: 2rem;
+
+  th {
+    text-align: left;
+    padding: 0.5rem;
+    border-bottom: 1px solid #ddd;
+  }
+
+  td {
+    padding: 0.5rem;
+    border-bottom: 1px solid #ddd;
+  }
+
+  tr:nth-child(even) {
+    background-color: hsl(0, 0%, 10%);
+  }
+}
+
+.status {
+  color: $primary-clr;
+  font-size: 1rem;
+  width: 100%;
+  text-align: right;
+  padding: 1rem;
+  font-family: 'Courier New', Courier, monospace;
+}

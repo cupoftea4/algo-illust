@@ -1,4 +1,4 @@
-import { HighlightedElements, SortArray } from '../types';
+import { HighlightedElements, SortArray } from '../utils/types';
 import styles from './Graph.module.scss';
 
 const Graph = ({ array, swaps } : {array: SortArray, swaps: HighlightedElements}) => {

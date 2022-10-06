@@ -2,16 +2,8 @@ import { useEffect, useState } from "react";
 import { useOutletContext } from "react-router-dom";
 import Graph from "./Graph";
 import styles from "./SortComponent.module.scss";
-import isSorted from "../features/isSorted";
-import { SortArray, SortFunc, HighlightedElements } from "../types";
-
-type OutletContextType = [
-  [SortArray, (array: SortArray) => void],
-  [boolean, (state: boolean) => void],
-  [HighlightedElements, (elements: HighlightedElements) => void],
-  boolean,
-  number
-];
+import isSorted from "../utils/isSorted";
+import { SortArray, SortFunc, HighlightedElements, OutletContextSort } from "../utils/types";;
 
 const SortComponent = (sort: SortFunc) => {
   const Component = function () {
@@ -23,13 +15,13 @@ const SortComponent = (sort: SortFunc) => {
       swappingElementsState,
       isASC,
       delay
-    ]: OutletContextType = useOutletContext();
+    ]: OutletContextSort = useOutletContext();
     const [isSorting, setIsSorting] = isSortingState;
     const [array, setArray] = arrayState;
     const [swappingElements, setSwappingElements] = swappingElementsState;
 
     useEffect(() => {
-      if (!isSorting && array.length > 0 && !isSorted(array, isASC)) {
+      if (!isSorting && array.length > 0 && array.length < 600 && !isSorted(array, isASC)) {
         startSorting();
       }
       // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -45,11 +37,11 @@ const SortComponent = (sort: SortFunc) => {
       setIsSorting(true);
       return new Promise(async () => {
         const startTime = performance.now();
-        const stepsSpent = await sort(array, renderChanges, isASC);
+        const stepsSpent = await sort([...array], isASC, renderChanges);
         const sortTime = performance.now() - startTime - stepsSpent * delay;
         setSteps(stepsSpent);
         setTimeTaken(Math.round(sortTime * 100) / 100);
-        setSwappingElements({ sorted: true});
+        setSwappingElements({ sorted: true });
         setIsSorting(false);
       });
     };
