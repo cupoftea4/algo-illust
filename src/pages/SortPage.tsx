@@ -1,7 +1,7 @@
 import NavBar from "../components/SortNavBar";
 import { Outlet } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { HighlightedElements, SortArray, SortTypeId } from "../utils/types";
+import { HighlightedElements, SortArray, SortTypeId } from "../utils/types/sort.types";
 import styles from "./SortPage.module.scss";
 import generateArray from "../utils/generateArray";
 import Params from "../components/Params";
@@ -40,7 +40,7 @@ const SortPage = () => {
   return (
     <>
       <div>
-        <span className={styles.header}>
+        <header>
           <NavBar type={sortType} setType={setSortType} />
           <span>
             <button
@@ -52,7 +52,7 @@ const SortPage = () => {
             </button>
            <Params setIllustDelay={setIllustDelay} setVariant={setVariant} />
           </span>
-        </span>
+        </header>
 
         <span className={styles.params}>
             <SizeForm onLengthSubmit={onLengthSubmit} />

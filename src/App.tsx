@@ -12,7 +12,7 @@ import {
 } from "./utils/sorts";
 import Home from "./pages/Home";
 import SortsTable from "./components/SortsTable";
-// import {withRouter} from 'react-router-dom'
+import DataStructuresPage from "./pages/DataStructuresPage";
 
 function App() {
   const BubbleSort = useMemo(() => SortComponent(bubbleSort), []);
@@ -36,10 +36,13 @@ function App() {
             <Route path="counting" element={<CountingSort />} />
           </Route>
           <Route path="sort/compare" element={<SortsTable />} />
-          <Route path="ds/" element={<div>ds</div>} >
-            <Route path="linked-list" element={<div>linked-list</div>} />
+          <Route path="ds/" element={<DataStructuresPage/>} >
             <Route path="stack" element={<div>stack</div>} />
             <Route path="queue" element={<div>queue</div>} />
+            <Route path="linked-list" element={<div>linked-list</div>} />
+            <Route path="doubly-linked" element={<div>doubly-linked</div>} />
+            <Route path="circlar-linked" element={<div>circlar-linked</div>} />
+            <Route path="deque" element={<div>deque</div>} />
             <Route path="tree" element={<div>tree</div>} />
           </Route>
           <Route path="search/" element={<div>search</div>} >

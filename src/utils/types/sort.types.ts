@@ -48,5 +48,4 @@ export type SortStats = {
   sorted?: boolean;
 }
 
-
 export type SortWithStatsFunc = (array: SortArray) => Promise<SortStats>;

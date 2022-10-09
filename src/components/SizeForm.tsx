@@ -1,4 +1,5 @@
-import { FormEventHandler } from 'react'
+import { FormEventHandler } from 'react';
+import './Form.module.scss';
 
 const SizeForm = ({onLengthSubmit}: {onLengthSubmit:  FormEventHandler<HTMLFormElement>}) => {
   return (

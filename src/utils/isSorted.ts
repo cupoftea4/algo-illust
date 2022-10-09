@@ -1,4 +1,4 @@
-import { SortArray } from "./types";
+import { SortArray } from "./types/sort.types";
 
 function isSorted(arr: SortArray, asc: boolean): boolean {
   if (Array.isArray(arr[0])) {

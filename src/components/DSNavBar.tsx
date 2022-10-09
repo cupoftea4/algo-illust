@@ -1,30 +1,30 @@
 import { Link } from "react-router-dom";
-import { SortType, SortTypeId } from "../utils/types/sort.types";
+import { DSTypeId, DSType } from "../utils/types/ds.types";
 import styles from './NavBar.module.scss';
 
 type NavBarProps = {
-  type: SortTypeId;
-  setType: (type: SortTypeId) => void;
+  type: DSTypeId;
+  setType: (type: DSTypeId) => void;
 }
 
 const NavBar = ({type, setType}: NavBarProps) => {
 
-  const sorts: SortType[] = [
-    {id: 'bubble', name: 'Bubble Sort'},
-    {id: 'selection', name: 'Selection Sort'},
-    {id: 'shell', name: 'Shell Sort'},
-    {id: 'merge', name: 'Merge Sort'},
-    {id: 'quick', name: 'Quick Sort'},
-    {id: 'counting', name: 'Counting Sort'},
-    {id: 'compare', name: 'Comparison'}
+  const dataStructs: DSType[] = [
+    {id: 'stack', name: 'Stack'},
+    {id: 'queue', name: 'Queue'},
+    {id: 'linked-list', name: 'Linked List'},
+    {id: 'doubly-linked', name: 'Doubly List'},
+    {id: 'circular-linked', name: 'Circular List'},
+    {id: 'deque', name: 'Deque'},
+    {id: 'tree', name: 'Tree'},
   ];
 
   return (
       <nav>
-        {sorts.map(sort => (
+        {dataStructs.map(sort => (
           <Link
             key={sort.id}
-            to={'/sort/' + sort.id}
+            to={'/ds/' + sort.id}
             className={`${type === sort.id && styles.textSelected}`}
             onClick={() => setType(sort.id)}
             title={sort.name}

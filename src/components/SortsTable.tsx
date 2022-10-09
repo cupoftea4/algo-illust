@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { SortStats, SortType, SortTypeId } from '../utils/types';
+import { SortStats, SortType, SortTypeId } from '../utils/types/sort.types';
 import styles from './CompareSorts.module.scss';
 import SizeForm from './SizeForm';
 import WorkerBuilder from '../utils/workerBuilder';

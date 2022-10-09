@@ -1,4 +1,4 @@
-import { SortFunc, SortArray, RenderFunc } from "../utils/types";
+import { SortFunc, SortArray, RenderFunc } from "../utils/types/sort.types";
 import isSorted from "./isSorted";
 
 let IS_ASC = true;

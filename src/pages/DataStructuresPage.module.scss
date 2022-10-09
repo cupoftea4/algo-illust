@@ -1,0 +1,21 @@
+header {
+  svg:hover {
+    cursor: pointer;
+    transition: .1s ease-in-out;
+    &:hover {
+      transform: scale(1.1);
+    }
+  }
+}
+
+.centerX {
+  display: flex;
+  justify-content: center;
+}
+
+.bottomRight {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  padding: 1rem;
+}
