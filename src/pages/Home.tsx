@@ -47,7 +47,7 @@ const Home = () => {
     {name: "data structures", path: "ds/stack"}
   ];
 
-  const handleInput = (e: any) => {
+  const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.value.length < 2) return;
     menuItems.forEach((item, index) => {
       if (item.name.includes(e.target.value.toLowerCase())) {
@@ -57,7 +57,7 @@ const Home = () => {
   };
 
   return (
-    <div>
+    <>
       <div className={styles.central}>
         {showTittle ?
           <h1 className={styles.loadScreen}>Algorithms Visualizer</h1>
@@ -85,7 +85,7 @@ const Home = () => {
           </div>
         }
       </div>
-    </div>
+    </>
   )
 };
 
