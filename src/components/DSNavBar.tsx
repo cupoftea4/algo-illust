@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import HomeIcon from "../assets/HomeIcon";
 import { DSTypeId, DSType } from "../utils/types/ds.types";
 import styles from './NavBar.module.scss';
 
@@ -21,6 +22,9 @@ const NavBar = ({type, setType}: NavBarProps) => {
 
   return (
       <nav>
+        <Link to="/">
+          <HomeIcon/>
+        </Link>
         {dataStructs.map(sort => (
           <Link
             key={sort.id}

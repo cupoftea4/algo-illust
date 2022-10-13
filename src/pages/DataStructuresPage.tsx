@@ -40,11 +40,11 @@ const DataStructuresPage = () => {
     `
   }
 
-  const checkInput = (value: string) => {
+  const checkInput = (value: string | number) => {
     if (array.length > 11 || array.includes(value) || value === '') 
       return false;
 
-    if (isNaN(+value) && value.length > 1) {
+    if (isNaN(+value) && value.toString().length > 1) {
       alert('Strings are not allowed');
       return false;
     }
@@ -59,15 +59,22 @@ const DataStructuresPage = () => {
     return true;
   }
 
-  const pushElement = () => {
+  const randomValue = () => {
     let value = Math.round(Math.random() * MAX_RANDOM), i = 0;
     while (array.includes(value) && i < MAX_RANDOM) {
       value = Math.round(Math.random() * MAX_RANDOM);
       i++;
     }
-    if (checkInput(value.toString())) {
+    return value;
+  }
+
+  const pushElement = (val: string = '') => {
+    const value = val || randomValue();
+    const numberishValue = isNaN(+value) ? value : +value; // converts to number if possible
+    
+    if (checkInput(numberishValue)) {
       setStats(null)
-      setArray([...array, value]);
+      setArray([...array, numberishValue]);
     }
   }
 
@@ -85,14 +92,14 @@ const DataStructuresPage = () => {
           <DSNavBar type={type} setType={setType}/>
           <span>
             <input onKeyDown={(e) => {
-              if (e.key === 'Enter') {
-                if (checkInput(e.currentTarget.value)) {
-                  setArray([...array, e.currentTarget.value]);
+                if (e.key === 'Enter') {
+                  pushElement(e.currentTarget.value);
+                  e.currentTarget.value = '';
                 }
-                e.currentTarget.value = '';
-              }
-            }} />   
-            <DiceIcon onClick={pushElement}/>          
+              }}
+              placeholder="Enter to add el"
+             />   
+            <DiceIcon onClick={() => pushElement()}/>          
           </span>   
         </header>
         <form onSubmit={runStats} className={styles.centerX}>

@@ -4,7 +4,6 @@ import { DSClass } from "../types/ds.types";
 const RANDOM_ARRAY_SIZE = 5;
 
 function testDS(array: DSArray, toFind: DSArrayElement, DSType: DSClass) {
-  console.log("Running test for", DSType.name);
   const ds = new DSType(array);
   const randDS = new DSType(
     Array.from({ length: RANDOM_ARRAY_SIZE }, () => Math.floor(Math.random() * 100))

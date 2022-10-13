@@ -7,38 +7,43 @@ nav {
     list-style: none;
     color: $secondary-clr;
     text-decoration: none;
+    svg {
+        width: 2rem;
+        height: auto;
+    }
+
+    a {
+        cursor: pointer;
+        color: $primary-clr;
+        text-decoration: none;
+        padding: .5rem 1rem;
+        position: relative;
+        &.textSelected {
+            color: $secondary-clr;
+            transition: .1s ease-in-out;
+        }
+        &::after{
+            content: '';
+            position: absolute;
+            width: 60%;
+            height: .2rem;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%) scaleX(0);
+            background-color: $primary-clr;
+            border-radius: .7rem;
+            visibility: hidden;
+            transition: .25s linear;
+        }
+        &:hover:after,
+        &:focus:after {
+            visibility: visible;
+            transform: translateX(-50%) scaleX(1);
+        }
+        
+    }
 }
-    
-nav > a {
-    cursor: pointer;
-    color: $primary-clr;
-    text-decoration: none;
-    padding: .5rem 1rem;
-    position: relative;
-    &.textSelected {
-        color: $secondary-clr;
-        transition: .1s ease-in-out;
-    }
-    &::after{
-        content: '';
-        position: absolute;
-        width: 60%;
-        height: .2rem;
-        bottom: 0;
-        left: 50%;
-        transform: translateX(-50%) scaleX(0);
-        background-color: $primary-clr;
-        border-radius: .7rem;
-        visibility: hidden;
-        transition: .25s linear;
-    }
-    &:hover:after,
-    &:focus:after {
-        visibility: visible;
-        transform: translateX(-50%) scaleX(1);
-    }
-    
-}
+     
 
 .selected {
     position: absolute;
@@ -68,7 +73,8 @@ nav > a {
         align-items: center;
         justify-content: center;
         gap: 0rem;
-        > a {
+
+        a {
             padding: .2rem;
         }
     }
