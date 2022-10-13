@@ -1,6 +1,5 @@
 import React from 'react'
 import DiceIcon from '../assets/DiceIcon';
-import Stack from '../components/data_structures/Stack';
 import DSNavBar from '../components/DSNavBar';
 import { DSArray, DSClassMap, DSStats } from '../utils/types/ds.types';
 import { DSTypeId } from '../utils/types/ds.types';
@@ -10,6 +9,7 @@ import {
   StackDS, QueueDS, DequeDS, LinkedListDS, DoublyLinkedListDS, CircularListDS 
 } from '../utils/types/ds.types';
 import testDS from '../utils/data_structures/test';
+import { Outlet } from 'react-router-dom';
 
 const MAX_RANDOM = 100;
 
@@ -25,10 +25,10 @@ const dsClasses: DSClassMap = {
 
 const DataStructuresPage = () => {
   const [array, setArray] = React.useState<DSArray>([]);
-  const [type, setType] = React.useState<DSTypeId>('stack');
-  const [stats, setStats] = React.useState<DSStats>();
+  const [type, setType] = React.useState<DSTypeId>(window.location.href.split("/").pop() as DSTypeId);
+  const [stats, setStats] = React.useState<DSStats | null>(null);
 
-  const stringifyStats = (stats: DSStats | undefined) => {
+  const stringifyStats = (stats: DSStats) => {
     if (!stats) return '';
     return `
       Length: ${stats.length},
@@ -66,6 +66,7 @@ const DataStructuresPage = () => {
       i++;
     }
     if (checkInput(value.toString())) {
+      setStats(null)
       setArray([...array, value]);
     }
   }
@@ -107,9 +108,13 @@ const DataStructuresPage = () => {
           </form> 
       </div>
       <div className={styles.centerX}>
-        <Stack arrayState={[array, setArray]}/>
+        <Outlet context={[
+          [array, setArray],
+          type,
+          [stats, setStats]
+        ]}/>
       </div>
-      <span className={styles.bottomRight}>{stringifyStats(stats)}</span>
+      <span className={styles.bottomRight}>{stats && stringifyStats(stats)}</span>
     </>
   )
 };

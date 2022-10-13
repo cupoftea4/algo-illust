@@ -1,6 +1,6 @@
 import NavBar from "../components/SortNavBar";
 import { Outlet } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { HighlightedElements, SortArray, SortTypeId } from "../utils/types/sort.types";
 import styles from "./SortPage.module.scss";
 import generateArray from "../utils/generateArray";
@@ -12,16 +12,11 @@ const SortPage = () => {
   const [array, setArray] = useState<SortArray>([]);
   const [swappingElements, setSwappingElements] = useState<HighlightedElements>({});
   const [illustDelay, setIllustDelay] = useState<number>(250);
-  const [sortType, setSortType] = useState<SortTypeId>('bubble');
+  const [sortType, setSortType] = useState<SortTypeId>(window.location.href.split("/").pop() as SortTypeId);
   const [isASC, setIsASC] = useState<boolean>(true);
   const [loading, setLoading] = useState<boolean>(false);
   const [isSorting, setIsSorting] = useState<boolean>(false);
   const [variant, setVariant] = useState<number>(0);
-  
-  useEffect(() => {
-    const href = window.location.href.split("/").pop() as SortTypeId;
-    setSortType(href);
-  }, []);
 
   const onLengthSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();

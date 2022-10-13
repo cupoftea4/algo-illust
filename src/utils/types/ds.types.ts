@@ -12,6 +12,12 @@ export const LinkedListDS = LinkedList;
 export const DoublyLinkedListDS = DoublyLinkedList;
 export const CircularListDS = CircularList;
 
+export type OutletContextDS = [
+  [DSArray, (array: DSArray) => void],
+  DSTypeId,
+  [DSStats | null, (stats: DSStats | null) => void]
+];
+
 export type DSTypeId = 
   | 'stack' 
   | 'queue' 
@@ -54,8 +60,3 @@ export type DSStats = {
   foundIndex: number | null,
   mergedArray: DSArray
 };
-
-
-  
-
-

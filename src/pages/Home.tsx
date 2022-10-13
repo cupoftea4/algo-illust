@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import useFocus from '../hooks/useFocus';
 import TerminalArrow from '../images/TerminalArrow';
@@ -10,18 +10,6 @@ const Home = () => {
   const [inputFocus, setInputFocus]: any = useFocus();
   const navigate = useNavigate();
   const header = "Let's get started!";
-
-  useEffect(() => {   
-    setTimeout(() => {
-      if (inputFocus.current) setInputFocus();
-    }, 1000 * (header.length / 2 + 1));
-  }, [showTittle]);
-
-  const menuItems = [
-    {name: "sort", path: "sort/bubble"},
-    {name: "search", path: "search/binary"},
-    {name: "data structures", path: "ds/"}
-  ];
 
   useEffect(() => {
     setTimeout(() => {
@@ -43,16 +31,30 @@ const Home = () => {
         });
       }
     };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {   
+    setTimeout(() => {
+      if (inputFocus.current) setInputFocus();
+    }, 1000 * (header.length / 2 + 1));
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [showTittle]);
+
+  const menuItems = [
+    {name: "sort", path: "sort/bubble"},
+    {name: "search", path: "search/binary"},
+    {name: "data structures", path: "ds/stack"}
+  ];
 
   const handleInput = (e: any) => {
     if (e.target.value.length < 2) return;
-    menuItems.find((item, index) => {
+    menuItems.forEach((item, index) => {
       if (item.name.includes(e.target.value.toLowerCase())) {
         setSelectedItem(index); 
       }
     });
-  }
+  };
 
   return (
     <div>
@@ -85,6 +87,6 @@ const Home = () => {
       </div>
     </div>
   )
-}
+};
 
 export default Home;

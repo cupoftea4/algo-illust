@@ -13,6 +13,8 @@ import {
 import Home from "./pages/Home";
 import SortsTable from "./components/SortsTable";
 import DataStructuresPage from "./pages/DataStructuresPage";
+import DataStructure from "./components/data_structures/DataStructure";
+import Tree from "./components/data_structures/Tree";
 
 function App() {
   const BubbleSort = useMemo(() => SortComponent(bubbleSort), []);
@@ -37,13 +39,13 @@ function App() {
           </Route>
           <Route path="sort/compare" element={<SortsTable />} />
           <Route path="ds/" element={<DataStructuresPage/>} >
-            <Route path="stack" element={<div>stack</div>} />
-            <Route path="queue" element={<div>queue</div>} />
-            <Route path="linked-list" element={<div>linked-list</div>} />
-            <Route path="doubly-linked" element={<div>doubly-linked</div>} />
-            <Route path="circlar-linked" element={<div>circlar-linked</div>} />
-            <Route path="deque" element={<div>deque</div>} />
-            <Route path="tree" element={<div>tree</div>} />
+            <Route path="stack" element={<DataStructure/>} />
+            <Route path="queue" element={<DataStructure/>} />
+            <Route path="linked-list" element={<DataStructure/>} />
+            <Route path="doubly-linked" element={<DataStructure/>} />
+            <Route path="circular-linked" element={<DataStructure/>} />
+            <Route path="deque" element={<DataStructure/>} />
+            <Route path="tree" element={<Tree/>} />
           </Route>
           <Route path="search/" element={<div>search</div>} >
             <Route path="linear" element={<div>linear</div>} />

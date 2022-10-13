@@ -1,0 +1,29 @@
+@mixin DS-item {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 0.05em solid #ccc;
+  padding: 0.25em;
+  transition: all 0.2s ease-in;
+  &:hover {
+    background-color: rgb(255, 255, 255, 0.3);
+  }
+  &::before {
+    content: attr(data-value);
+  }
+  &.deletable:hover {
+    background-image: none;
+    background-color: rgba(230, 158, 158, 0.25);
+    cursor: pointer;
+    &::before {
+      content: 'x';
+    }
+  }
+}
+ 
+@mixin flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center; 
+}

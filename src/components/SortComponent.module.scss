@@ -1,9 +1,8 @@
 @use '../styles/variables' as *;
+@use '../styles/mixins' as *;
 
 .container {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  @include flex-center;
 }
 
 .status {
