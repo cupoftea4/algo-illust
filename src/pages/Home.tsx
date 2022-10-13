@@ -57,7 +57,6 @@ const Home = () => {
   };
 
   return (
-    <>
       <div className={styles.central}>
         {showTittle ?
           <h1 className={styles.loadScreen}>Algorithms Visualizer</h1>
@@ -85,7 +84,6 @@ const Home = () => {
           </div>
         }
       </div>
-    </>
   )
 };
 
