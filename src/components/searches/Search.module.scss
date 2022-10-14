@@ -1,0 +1,28 @@
+@use '../../styles/mixins' as *;
+@use '../../styles/variables' as *;
+
+.search-array {
+  @include flex-center;
+  flex-wrap: wrap;
+  gap: .5rem;
+  div {
+    width: 3rem;
+    border: 0.1rem solid $primary-clr; 
+    @include flex-center;
+    padding: .5rem 2rem;
+    transition: all .2s ease-in-out;
+    &:hover {
+      background-color: hsla(0, 0%, 100%, 0.138);
+    }
+    &.active {
+      background-color: $active-clr;
+      color: $secondary-clr;
+      border-color: $active-clr;
+      &:hover {
+        background-color: $dark-active-clr;
+        border-color: $dark-active-clr;
+        color: $primary-clr;
+      }
+    }
+  }
+}

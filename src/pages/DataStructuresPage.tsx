@@ -1,6 +1,6 @@
 import React from 'react'
 import DiceIcon from '../assets/DiceIcon';
-import DSNavBar from '../components/DSNavBar';
+import DSNavBar from '../components/navigations/DSNavBar';
 import { DSArray, DSClassMap, DSStats } from '../utils/types/ds.types';
 import { DSTypeId } from '../utils/types/ds.types';
 import styles from './DataStructuresPage.module.scss';
@@ -88,7 +88,7 @@ const DataStructuresPage = () => {
   return (
     <>   
       <div>
-        <header >
+        <header>
           <DSNavBar type={type} setType={setType}/>
           <span>
             <input onKeyDown={(e) => {
@@ -102,7 +102,7 @@ const DataStructuresPage = () => {
             <DiceIcon onClick={() => pushElement()}/>          
           </span>   
         </header>
-        <form onSubmit={runStats} className={styles.centerX}>
+        <form onSubmit={runStats} className='centerX'>
             <span>
               <label htmlFor="toFind">Find:</label>
               <input
@@ -114,7 +114,7 @@ const DataStructuresPage = () => {
             <input type="submit" value="Start" title="Get Stats" />
           </form> 
       </div>
-      <div className={styles.centerX}>
+      <div className='centerX'>
         <Outlet context={[
           [array, setArray],
           type,

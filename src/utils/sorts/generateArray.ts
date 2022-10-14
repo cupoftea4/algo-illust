@@ -1,4 +1,4 @@
-import { findLastIndex } from "./findLastIndex";
+import { findLastIndex } from "../findLastIndex";
 
 // This functions are needed for my university. You can use just random numbers (by choosing "rand" for var)
 

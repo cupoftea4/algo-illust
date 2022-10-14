@@ -1,0 +1,10 @@
+@use './mixins' as *;
+
+.centerX {
+  display: flex;
+  justify-content: center;
+}
+
+.center {
+  @include flex-center;
+}

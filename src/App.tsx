@@ -1,6 +1,6 @@
 import SortPage from "./pages/SortPage";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import SortComponent from "./components/SortComponent";
+import SortComponent from "./components/sorts/SortComponent";
 import { useMemo } from "react";
 import {
   bubbleSort,
@@ -9,12 +9,16 @@ import {
   countingSort,
   quickSort,
   mergeSort,
-} from "./utils/sorts";
+} from "./utils/sorts/sorts";
 import Home from "./pages/Home";
-import SortsTable from "./components/SortsTable";
+import SortsTable from "./components/sorts/SortsTable";
 import DataStructuresPage from "./pages/DataStructuresPage";
 import DataStructure from "./components/data_structures/DataStructure";
 import Tree from "./components/data_structures/Tree";
+import SearchPage from "./pages/SearchPage";
+import KMP from "./components/searches/KMP";
+import BM from "./components/searches/BM";
+import Binary from "./components/searches/Binary";
 
 function App() {
   const BubbleSort = useMemo(() => SortComponent(bubbleSort), []);
@@ -47,9 +51,10 @@ function App() {
             <Route path="deque" element={<DataStructure/>} />
             <Route path="tree" element={<Tree/>} />
           </Route>
-          <Route path="search/" element={<div>search</div>} >
-            <Route path="linear" element={<div>linear</div>} />
-            <Route path="binary" element={<div>binary</div>} />
+          <Route path="search/" element={<SearchPage/>} >
+            <Route path="binary" element={<Binary/>} />
+            <Route path="kmp" element={<KMP/>} />
+            <Route path="bm" element={<BM/>} />
             <Route path="hash" element={<div>hash</div>} />
           </Route>
           <Route path="*" element={<h1 style={{color: "white"}}>404</h1>} />

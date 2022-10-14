@@ -1,10 +1,10 @@
-import NavBar from "../components/SortNavBar";
+import NavBar from "../components/navigations/SortNavBar";
 import { Outlet } from "react-router-dom";
 import { useState } from "react";
 import { HighlightedElements, SortArray, SortTypeId } from "../utils/types/sort.types";
 import styles from "./SortPage.module.scss";
-import generateArray from "../utils/generateArray";
-import Params from "../components/Params";
+import generateArray from "../utils/sorts/generateArray";
+import Params from "../components/sorts/Params";
 import SizeForm from "../components/SizeForm";
 
 
@@ -49,7 +49,7 @@ const SortPage = () => {
           </span>
         </header>
 
-        <span className={styles.params}>
+        <span className='centerX'>
             <SizeForm onLengthSubmit={onLengthSubmit} />
         </span>
       </div>

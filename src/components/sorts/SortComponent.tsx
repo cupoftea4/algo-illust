@@ -2,8 +2,8 @@ import { useEffect, useState } from "react";
 import { useOutletContext } from "react-router-dom";
 import Graph from "./Graph";
 import styles from "./SortComponent.module.scss";
-import isSorted from "../utils/isSorted";
-import { SortArray, SortFunc, HighlightedElements, OutletContextSort } from "../utils/types/sort.types";
+import isSorted from "../../utils/isSorted";
+import { SortArray, SortFunc, HighlightedElements, OutletContextSort } from "../../utils/types/sort.types";
 
 const SortComponent = (sort: SortFunc) => {
   const Component = function () {

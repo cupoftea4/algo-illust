@@ -14,7 +14,7 @@ const SizeForm = ({onLengthSubmit}: {onLengthSubmit:  FormEventHandler<HTMLFormE
           min={2}
         />
       </span>
-      <input type="submit" value="Run" title="Start sorting" />
+      <input type="submit" value="Run" title="Start" />
     </form>
   )
 }
