@@ -3,6 +3,7 @@ import Deque from "../data_structures/deque";
 import DoublyLinkedList from "../data_structures/doublyLinkedList";
 import LinkedList from "../data_structures/linkedList";
 import Queue from "../data_structures/queue";
+import { RBTree } from "../data_structures/RedBlackTree";
 import Stack from "../data_structures/stack";
 
 export const StackDS = Stack;
@@ -18,14 +19,14 @@ export type OutletContextDS = [
   [DSStats | null, (stats: DSStats | null) => void]
 ];
 
-export type DSTypeId = 
-  | 'stack' 
-  | 'queue' 
-  | 'deque'
-  | 'linked-list' 
-  | 'doubly-linked'
-  | 'circular-linked' 
-  | 'tree';
+export type DSTypeId =
+  | "stack"
+  | "queue"
+  | "deque"
+  | "linked-list"
+  | "doubly-linked"
+  | "circular-linked"
+  | "tree";
 
 export type DSClass =
   | typeof StackDS
@@ -34,9 +35,10 @@ export type DSClass =
   | typeof LinkedListDS
   | typeof DoublyLinkedListDS
   | typeof CircularListDS;
+// | typeof RBTree;
 
 export type DSClassMap = {
-  [key in DSTypeId]: DSClass
+  [key in DSTypeId]: DSClass;
 };
 
 export type DSType = {
@@ -44,19 +46,19 @@ export type DSType = {
   name: string;
 };
 
-export type DSArrayElement = (number | string);
+export type DSArrayElement = number | string;
 
 export type DSArray = (number | string)[];
 
 export type DSStats = {
-  length: number,
-  min: DSArrayElement,
-  elBeforeMin: DSArrayElement,
-  max: DSArrayElement,
-  elAfterMax: DSArrayElement,
-  thirdFromEnd: DSArrayElement,
-  secondFromStart: DSArrayElement,
-  searchValue: DSArrayElement,
-  foundIndex: number | null,
-  mergedArray: DSArray
+  length: number;
+  min: DSArrayElement;
+  elBeforeMin: DSArrayElement;
+  max: DSArrayElement;
+  elAfterMax: DSArrayElement;
+  thirdFromEnd: DSArrayElement;
+  secondFromStart: DSArrayElement;
+  searchValue: DSArrayElement;
+  foundIndex: number | null;
+  mergedArray: DSArray;
 };
