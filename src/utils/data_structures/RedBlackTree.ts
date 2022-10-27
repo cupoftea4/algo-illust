@@ -1,0 +1,535 @@
+// Constructor for BST
+class BST {
+  public root: any;
+  public size: number;
+
+  constructor() {
+    this.root = null;
+    this.size = 0;
+  }
+  // Returns true if the element is in the tree
+  search(e: any) {
+    let current = this.root; // Start from the root
+
+    while (current != null) {
+      if (e < current.element) {
+        current = current.left;
+      } else if (e > current.element) {
+        current = current.right;
+      } // element matches current.element
+      else return true; // Element is found
+    }
+
+    return false;
+  }
+
+  searchNode(e: any) {
+    let current = this.root; // Start from the root
+
+    while (current != null) {
+      if (e < current.element) {
+        current = current.left;
+      } else if (e > current.element) {
+        current = current.right;
+      } // element matches current.element
+      else return current; // Element is found
+    }
+
+    return false;
+  }
+  // Insert a new element e
+  insert(e: any) {
+    if (this.root == null)
+      this.root = this.createNewNode(e); // Create a new root
+    else {
+      // Locate the parent node
+      let parent = null;
+      let current = this.root;
+      while (current != null)
+        if (e < current.element) {
+          parent = current;
+          current = current.left;
+        } else if (e > current.element) {
+          parent = current;
+          current = current.right;
+        } else return false; // Duplicate node not inserted
+
+      // Create the new node and attach it to the parent node
+      if (e < parent.element) {
+        parent.left = this.createNewNode(e);
+      } else {
+        parent.right = this.createNewNode(e);
+      }
+    }
+
+    this.size++;
+    return true; // Element inserted
+  }
+  createNewNode(e: any) {
+    return new TreeNode(e);
+  }
+  /** Delete an element from the binary tree.
+   * Return true if the element is deleted successfully
+   * Return false if the element is not in the tree
+   */
+  remove(e: any) {
+    // Locate the node to be deleted and also locate its parent node
+    let parent = null;
+    let current = this.root;
+    while (current != null) {
+      if (e < current.element) {
+        parent = current;
+        current = current.left;
+      } else if (e > current.element) {
+        parent = current;
+        current = current.right;
+      } else break; // Element is in the tree pointed at by current
+    }
+
+    if (current == null) return false; // Element is not in the tree
+
+    // Case 1: current has no left children
+    if (current.left == null) {
+      // Connect the parent with the right child of the current node
+      if (parent == null) {
+        this.root = current.right;
+      } else {
+        if (e < parent.element) parent.left = current.right;
+        else parent.right = current.right;
+      }
+    } else {
+      // Case 2: The current node has a left child
+      // Locate the rightmost node in the left subtree of
+      // the current node and also its parent
+      let parentOfRightMost = current;
+      let rightMost = current.left;
+
+      while (rightMost.right != null) {
+        parentOfRightMost = rightMost;
+        rightMost = rightMost.right; // Keep going to the right
+      }
+
+      // Replace the element in current by the element in rightMost
+      current.element = rightMost.element;
+
+      // Eliminate rightmost node
+      if (parentOfRightMost.right == rightMost)
+        parentOfRightMost.right = rightMost.left;
+      // Special case: parentOfRightMost == current
+      else parentOfRightMost.left = rightMost.left;
+    }
+
+    this.size--;
+    return true; // Element inserted
+  }
+  /** Clear the tree
+   */
+  clear(e: any) {
+    this.root = null;
+    this.size = 0;
+  }
+  // Return true if the tree is empty
+  isEmpty() {
+    return this.root == null;
+  }
+  // Return the size of the tree
+  getSize() {
+    return this.size;
+  }
+  // Returns a path from the root leading to the specified element
+  path(e: any) {
+    let list = [];
+    let current = this.root; // Start from the root
+
+    while (current != null) {
+      list.push(current); // Add the node to the list
+      if (e < current.element) {
+        current = current.left;
+      } else if (e > current.element) {
+        current = current.right;
+      } else break;
+    }
+
+    return list; // Return an array of nodes
+  }
+  getRoot() {
+    return this.root;
+  }
+  getInorder(root: any, t: Array<object>): any {
+    if (root != null) {
+      t.push({ value: root.element, color: root.red });
+      this.getInorder(root.left, t);
+      this.getInorder(root.right, t);
+      return t;
+    } else return "";
+  }
+  getPreorder(root: any): any {
+    if (root != null) {
+      return (
+        root.element +
+        " " +
+        this.getPreorder(root.left) +
+        " " +
+        this.getPreorder(root.right)
+      );
+    } else return "";
+  }
+  getPostorder(root: any): any {
+    if (root != null)
+      return (
+        this.getPostorder(root.left) +
+        " " +
+        this.getPostorder(root.right) +
+        " " +
+        root.element
+      );
+    else return "";
+  }
+}
+
+// Constructor for Node
+class TreeNode {
+  private element: number | undefined;
+  private left: TreeNode | null;
+  private right: TreeNode | null;
+
+  constructor(e?: number) {
+    this.element = e;
+    this.left = null;
+    this.right = null;
+  }
+}
+
+// Constructor for RBTree
+export class RBTree extends BST {
+  static RBTree: BST;
+  constructor() {
+    super();
+    //  jAlert("RBTree called");
+    // BST.call(this);
+  }
+  // Override the createNewNode method
+  createNewNode(e: any): any {
+    //  jAlert("RBTree createNewNode");
+    return new RBTreeNode(e);
+  }
+  // Insert a new element e
+  insert(e: any) {
+    let successful = BST.prototype.insert.call(this, e);
+    //  jAlert("After insert, RBTree size is " + this.size);
+    if (!successful) return false; // e is already in the tree
+    else {
+      this.ensureRBTree(e);
+    }
+
+    return true; // e is inserted
+  }
+  /** Ensure that the tree is a red-black tree */
+  ensureRBTree(e: any) {
+    // Get the path that leads to element e from the this.root
+    let path = this.path(e);
+
+    let i = path.length - 1; // Index to the current node in the path
+
+    // u is the last node in the path. u contains element e
+    let u = path[i];
+
+    // v is the parent of of u, if exists
+    let v = u == this.root ? null : path[i - 1];
+
+    u.setRed(); // It is OK to set u red
+
+    if (u == this.root)
+      // If e is inserted as the this.root, set this.root black
+      u.setBlack();
+    else if (v.isRed()) this.fixDoubleRed(u, v, path, i); // Fix double red violation at u
+  }
+  /** Fix double red violation at node u */
+  fixDoubleRed(
+    u: { left: any; right: any; setRed: () => void },
+    v: { left: any; right: any },
+    path: any[],
+    i: number
+  ) {
+    // w is the grandparent of u
+    let w = path[i - 2];
+    let parentOfw = w == this.root ? null : path[i - 3];
+
+    // Get v's sibling named x
+    let x = w.left == v ? w.right : w.left;
+
+    if (x == null || x.isBlack()) {
+      // Case 1: v's sibling x is black
+      if (w.left == v && v.left == u) {
+        // Case 1.1: u < v < w, Restructure and recolor nodes
+        this.restructureRecolor(u, v, w, w, parentOfw);
+
+        w.left = v.right; // v.right is y3 in Figure 11.7
+        v.right = w;
+      } else if (w.left == v && v.right == u) {
+        // Case 1.2: v < u < w, Restructure and recolor nodes
+        this.restructureRecolor(v, u, w, w, parentOfw);
+        v.right = u.left;
+        w.left = u.right;
+        u.left = v;
+        u.right = w;
+      } else if (w.right == v && v.right == u) {
+        // Case 1.3: w < v < u, Restructure and recolor nodes
+        this.restructureRecolor(w, v, u, w, parentOfw);
+        w.right = v.left;
+        v.left = w;
+      } else {
+        // Case 1.4: w < u < v, Restructure and recolor nodes
+        this.restructureRecolor(w, u, v, w, parentOfw);
+        w.right = u.left;
+        v.left = u.right;
+        u.left = w;
+        u.right = v;
+      }
+    } else {
+      // Case 2: v's sibling x is red
+      // Recolor nodes
+      w.setRed();
+      u.setRed();
+      w.left.setBlack();
+      w.right.setBlack();
+
+      if (w == this.root) {
+        w.setBlack();
+      } else if (parentOfw.isRed()) {
+        // Propagate along the path to fix new double red violation
+        u = w;
+        v = parentOfw;
+        this.fixDoubleRed(u, v, path, i - 2); // i – 2 propagates upward
+      }
+    }
+  }
+  /** Connect b with parentOfw and recolor a, b, c for a < b < c */
+  restructureRecolor(
+    a: { left?: any; right?: any; setRed?: any },
+    b: { left?: any; right?: any; setRed?: () => void; setBlack?: any },
+    c: { left?: any; right?: any; setRed?: any },
+    w: any,
+    parentOfw: { left: any; right: any } | null
+  ) {
+    if (parentOfw == null) this.root = b;
+    else if (parentOfw.left == w) parentOfw.left = b;
+    else parentOfw.right = b;
+
+    b.setBlack(); // b becomes the this.root in the subtree
+    a.setRed(); // a becomes the left child of b
+    c.setRed(); // c becomes the right child of b
+  }
+  /** Delete the last node from the path. */
+  deleteLastNodeInPath(path: string | any[]) {
+    let i = path.length - 1; // Index to the node in the path
+
+    // u is the last node in the path
+    let u = path[i];
+    let parentOfu = u == this.root ? null : path[i - 1];
+    let grandparentOfu =
+      parentOfu == null || parentOfu == this.root ? null : path[i - 2];
+    let childOfu = u.left == null ? u.right : u.left;
+
+    // Delete node u. Connect childOfu with parentOfu
+    this.connectNewParent(parentOfu, u, childOfu);
+
+    // Recolor the nodes and fix double black if needed
+    if (childOfu == this.root || u.isRed())
+      return; // Done if childOfu is this.root or if u is red
+    else if (childOfu != null && childOfu.isRed())
+      childOfu.setBlack(); // Set it black, done
+    // u is black, childOfu is null or black
+    // Fix double black on parentOfu
+    else this.fixDoubleBlack(grandparentOfu, parentOfu, childOfu, path, i);
+  }
+  /** Fix the double black problem at node parent */
+  fixDoubleBlack(
+    grandparent: any,
+    parent: {
+      right: any;
+      left: any;
+      isRed: () => any;
+      setBlack: () => void;
+      setRed: () => void;
+    },
+    db: any,
+    path: string | any[],
+    i: number
+  ) {
+    // Obtain y, y1, and y2
+    let y = parent.right == db ? parent.left : parent.right;
+    let y1 = y.left;
+    let y2 = y.right;
+
+    if (y.isBlack() && y1 != null && y1.isRed()) {
+      if (parent.right == db) {
+        // Case 1.1: y is a left black sibling and y1 is red
+        this.connectNewParent(grandparent, parent, y);
+        this.recolor(parent, y, y1); // Adjust colors
+
+        // Adjust child links
+        parent.left = y.right;
+        y.right = parent;
+      } else {
+        // Case 1.3: y is a right black sibling and y1 is red
+        this.connectNewParent(grandparent, parent, y1);
+        this.recolor(parent, y1, y); // Adjust colors
+
+        // Adjust child links
+        parent.right = y1.left;
+        y.left = y1.right;
+        y1.left = parent;
+        y1.right = y;
+      }
+    } else if (y.isBlack() && y2 != null && y2.isRed()) {
+      if (parent.right == db) {
+        // Case 1.2: y is a left black sibling and y2 is red
+        this.connectNewParent(grandparent, parent, y2);
+        this.recolor(parent, y2, y); // Adjust colors
+
+        // Adjust child links
+        y.right = y2.left;
+        parent.left = y2.right;
+        y2.left = y;
+        y2.right = parent;
+      } else {
+        // Case 1.4: y is a right black sibling and y2 is red
+        this.connectNewParent(grandparent, parent, y);
+        this.recolor(parent, y, y2); // Adjust colors
+
+        // Adjust child links
+        y.left = parent;
+        parent.right = y1;
+      }
+    } else if (y.isBlack()) {
+      // Case 2: y is black and y's children are black or null
+      y.setRed(); // Change y to red
+      if (parent.isRed()) parent.setBlack(); // Done
+      else if (parent != this.root) {
+        // Propagate double black to the parent node
+        // Fix new appearance of double black recursively
+        db = parent;
+        parent = grandparent;
+        grandparent = i >= 3 ? path[i - 3] : null;
+        this.fixDoubleBlack(grandparent, parent, db, path, i - 1);
+      }
+    } else {
+      // y.isRed()
+      if (parent.right == db) {
+        // Case 3.1: y is a left red child of parent
+        parent.left = y2;
+        y.right = parent;
+      } else {
+        // Case 3.2: y is a right red child of parent
+        parent.right = y.left;
+        y.left = parent;
+      }
+
+      parent.setRed(); // Color parent red
+      y.setBlack(); // Color y black
+      this.connectNewParent(grandparent, parent, y); // y is new parent
+      this.fixDoubleBlack(y, parent, db, path, i - 1);
+    }
+  }
+  /** Recolor parent, newParent, and c. Case 1 removal */
+  recolor(
+    parent: {
+      right?: any;
+      left?: any;
+      isRed: any;
+      setBlack: any;
+      setRed?: () => void;
+    },
+    newParent: { setRed: () => void; setBlack: () => void },
+    c: { setBlack: () => void }
+  ) {
+    // Retain the parent's color for newParent
+    if (parent.isRed()) newParent.setRed();
+    else newParent.setBlack();
+
+    // c and parent become the children of newParent, set them black
+    parent.setBlack();
+    c.setBlack();
+  }
+  /** Connect newParent with grandParent */
+  connectNewParent(
+    grandparent: { left: any; right: any },
+    parent: {
+      right: any;
+      left: any;
+      isRed: () => any;
+      setBlack: () => void;
+      setRed: () => void;
+    },
+    newParent: { setBlack: () => void }
+  ) {
+    if (parent == this.root) {
+      this.root = newParent;
+      if (this.root != null) newParent.setBlack();
+    } else if (grandparent.left == parent) grandparent.left = newParent;
+    else grandparent.right = newParent;
+  }
+  delete(e: any) {
+    // Locate the node to be deleted
+    let current = this.root;
+    while (current != null) {
+      if (e < current.element) {
+        current = current.left;
+      } else if (e > current.element) {
+        current = current.right;
+      } else break; // Element is in the tree pointed by current
+    }
+
+    if (current == null) return false; // Element is not in the tree
+
+    let path;
+
+    // current node is an internal node
+    if (current.left != null && current.right != null) {
+      // Locate the rightmost node in the left subtree of current
+      let rightMost = current.left;
+      while (rightMost.right != null) {
+        rightMost = rightMost.right; // Keep going to the right
+      }
+
+      path = this.path(rightMost.element); // Get path before replacement
+
+      // Replace the element in current by the element in rightMost
+      current.element = rightMost.element;
+    } else path = this.path(e); // Get path to current node
+
+    // Delete the last node in the path and propagate if needed
+    this.deleteLastNodeInPath(path);
+
+    this.size--; // After one element deleted
+    return true; // Element deleted
+  }
+}
+
+// Constructor for Node
+class RBTreeNode extends TreeNode {
+  private red: boolean;
+  private blackHeight: number;
+  static RBTreeNode: TreeNode;
+  constructor(e: any) {
+    super(e);
+    this.red = true; // Indicate node color
+    this.blackHeight = 0;
+  }
+  isRed() {
+    return this.red;
+  }
+
+  isBlack() {
+    return !this.red;
+  }
+
+  setBlack() {
+    this.red = false;
+  }
+
+  setRed() {
+    this.red = true;
+  }
+}
