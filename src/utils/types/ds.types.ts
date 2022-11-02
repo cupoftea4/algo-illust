@@ -3,7 +3,6 @@ import Deque from "../data_structures/deque";
 import DoublyLinkedList from "../data_structures/doublyLinkedList";
 import LinkedList from "../data_structures/linkedList";
 import Queue from "../data_structures/queue";
-import { RBTree } from "../data_structures/RedBlackTree";
 import Stack from "../data_structures/stack";
 
 export const StackDS = Stack;

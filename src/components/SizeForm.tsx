@@ -2,6 +2,7 @@ import { FormEventHandler } from 'react';
 import './Form.module.scss';
 
 const SizeForm = ({onLengthSubmit}: {onLengthSubmit:  FormEventHandler<HTMLFormElement>}) => {
+  // TODO: make function to extract number from input
   return (
     <form onSubmit={onLengthSubmit}>
       <span>
@@ -19,4 +20,4 @@ const SizeForm = ({onLengthSubmit}: {onLengthSubmit:  FormEventHandler<HTMLFormE
   )
 }
 
-export default SizeForm
+export default SizeForm;

@@ -15,7 +15,6 @@ import {
 } from "../utils/types/ds.types";
 import testDS from "../utils/data_structures/test";
 import { Outlet } from "react-router-dom";
-import { RBTree } from "../utils/data_structures/RedBlackTree";
 
 const MAX_RANDOM = 100;
 
@@ -101,41 +100,39 @@ const DataStructuresPage = () => {
 
   return (
     <>
-      <div>
-        <header>
-          <DSNavBar type={type} setType={setType} />
-          {type === "tree" ? null : (
-            <span>
-              <input
-                onKeyDown={(e) => {
-                  if (e.key === "Enter") {
-                    pushElement(e.currentTarget.value);
-
-                    e.currentTarget.value = "";
-                  }
-                }}
-                placeholder="Enter to add el"
-              />
-              <DiceIcon onClick={() => pushElement()} />
-            </span>
-          )}
-        </header>
+      <header>
+        <DSNavBar type={type} setType={setType} />
         {type === "tree" ? null : (
-          <form onSubmit={runStats} className="centerX">
-            <span>
-              <label htmlFor="toFind">Find:</label>
-              <input name="toFind" placeholder="value" defaultValue="1" />
-            </span>
-            <input type="submit" value="Start" title="Get Stats" />
-          </form>
+          <span>
+            <input
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  pushElement(e.currentTarget.value);
+
+                  e.currentTarget.value = "";
+                }
+              }}
+              placeholder="Enter to add el"
+            />
+            <DiceIcon onClick={() => pushElement()} />
+          </span>
         )}
-      </div>
-      <div className="centerX">
+      </header>
+      {type === "tree" ? null : (
+        <form onSubmit={runStats} className="centerX">
+          <span>
+            <label htmlFor="toFind">Find:</label>
+            <input name="toFind" placeholder="value" defaultValue="1" />
+          </span>
+          <input type="submit" value="Start" title="Get Stats" />
+        </form>
+      )}
+      <main>
         <Outlet context={[[array, setArray], type, [stats, setStats]]} />
-      </div>
-      <span className={styles.bottomRight}>
+      </main>
+      <footer className={styles.bottomRight}>
         {stats && stringifyStats(stats)}
-      </span>
+      </footer>
     </>
   );
 };

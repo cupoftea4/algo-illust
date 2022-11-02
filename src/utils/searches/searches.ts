@@ -1,6 +1,6 @@
 type SearchArray = string | number[];
 
-export const binarySearch = async (arr: SearchArray, target: number | string, render: Function): Promise<[number | null, number]> => {
+export const binarySearch = async (arr: SearchArray, target: number | string, render: Function): Promise<[number[] | null, number]> => {
   let start = 0;
   let end = arr.length - 1;
   let steps = 0;
@@ -9,7 +9,18 @@ export const binarySearch = async (arr: SearchArray, target: number | string, re
     steps++;
     await render(mid);
     if (arr[mid] === target) {
-      return [mid, steps];
+      let cur = mid;
+      const result = [mid]
+      while (arr[--cur] === target) {
+        result.unshift(cur);
+        await render(cur);
+      } 
+      cur = mid;
+      while (arr[++cur] === target) {
+        result.push(cur);
+        await render(cur);
+      }
+      return [result, steps];
     } else if (arr[mid] < target) {
       start = mid + 1;
     } else {

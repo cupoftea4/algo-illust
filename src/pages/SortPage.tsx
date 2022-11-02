@@ -34,27 +34,24 @@ const SortPage = () => {
 
   return (
     <>
-      <div>
-        <header>
-          <NavBar type={sortType} setType={setSortType} />
-          <span>
-            <button
-              className={`${styles.sortWay} ${!isASC && styles.checked}`}
-              onClick={() => setIsASC(!isASC)}
-              title={`Sort in ${isASC ? "ascending" : "descending"} order`}
-            >
-              {isASC ? "Asc" : "Desc"}
-            </button>
-           <Params setIllustDelay={setIllustDelay} setVariant={setVariant} />
-          </span>
-        </header>
-
-        <span className='centerX'>
-            <SizeForm onLengthSubmit={onLengthSubmit} />
+      <header>
+        <NavBar type={sortType} setType={setSortType} />
+        <span>
+          <button
+            className={`${styles.sortWay} ${!isASC && styles.checked}`}
+            onClick={() => setIsASC(!isASC)}
+            title={`Sort in ${isASC ? "ascending" : "descending"} order`}
+          >
+            {isASC ? "Asc" : "Desc"}
+          </button>
+          <Params setIllustDelay={setIllustDelay} setVariant={setVariant} />
         </span>
-      </div>
+      </header>
+      <span className='centerX'>
+          <SizeForm onLengthSubmit={onLengthSubmit} />
+      </span>
       {loading ?
-        <div className={styles.status}>Fetching data...</div> 
+        <span className={styles.status}>Fetching data...</span> 
       : <Outlet context={[
           [array, setArray],
           [isSorting, setIsSorting],

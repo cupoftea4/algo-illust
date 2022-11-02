@@ -9,6 +9,7 @@ const Tree = () => {
 
   useEffect(() => {
     draw();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [canvasRef]);
 
   let vGap = 40;
@@ -75,13 +76,13 @@ const Tree = () => {
     context.fillStyle = "white";
 
     if (!isChar) {
-      if ((root.element + "").length == 1)
+      if ((root.element + "").length === 1)
         context.fillText(root.element + "", x - 3, y + 5);
-      else if ((root.element + "").length == 2)
+      else if ((root.element + "").length === 2)
         context.fillText(root.element + "", x - 8, y + 5);
-      else if ((root.element + "").length == 3)
+      else if ((root.element + "").length === 3)
         context.fillText(root.element + "", x - 12, y + 5);
-      else if ((root.element + "").length == 4)
+      else if ((root.element + "").length === 4)
         context.fillText(root.element + "", x - 16, y + 5);
       else context.fillText(root.element + "", x - 8, y + 5);
     } else {
@@ -159,50 +160,50 @@ const Tree = () => {
   //   draw();
   // }
 
-  function drawArrowLine(
-    context: {
-      moveTo: (arg0: any, arg1: any) => void;
-      lineTo: (arg0: any, arg1: any) => void;
-    },
-    x1: number,
-    y1: number,
-    x2: number,
-    y2: number
-  ) {
-    context.moveTo(x1, y1);
-    context.lineTo(x2, y2);
+  // function drawArrowLine(
+  //   context: {
+  //     moveTo: (arg0: any, arg1: any) => void;
+  //     lineTo: (arg0: any, arg1: any) => void;
+  //   },
+  //   x1: number,
+  //   y1: number,
+  //   x2: number,
+  //   y2: number
+  // ) {
+  //   context.moveTo(x1, y1);
+  //   context.lineTo(x2, y2);
 
-    // find slope of this line
-    var slope = (y1 - y2) / (x1 - x2);
+  //   // find slope of this line
+  //   var slope = (y1 - y2) / (x1 - x2);
 
-    var arctan = Math.atan(slope);
+  //   var arctan = Math.atan(slope);
 
-    // This will flip the arrow 45 off of a
-    // perpendicular line at pt x2
-    var set45 = 1.57 / 2;
+  //   // This will flip the arrow 45 off of a
+  //   // perpendicular line at pt x2
+  //   var set45 = 1.57 / 2;
 
-    // arrows should always point towards i, not i+1
-    if (x1 < x2) {
-      // add 90 degrees to arrow lines
-      set45 = -1.57 * 1.5;
-    }
+  //   // arrows should always point towards i, not i+1
+  //   if (x1 < x2) {
+  //     // add 90 degrees to arrow lines
+  //     set45 = -1.57 * 1.5;
+  //   }
 
-    // set length of arrows
-    var arrlen = 15;
+  //   // set length of arrows
+  //   var arrlen = 15;
 
-    // draw arrows on line
-    context.moveTo(x2, y2);
-    context.lineTo(
-      x2 + Math.cos(arctan + set45) * arrlen,
-      y2 + Math.sin(arctan + set45) * arrlen
-    );
+  //   // draw arrows on line
+  //   context.moveTo(x2, y2);
+  //   context.lineTo(
+  //     x2 + Math.cos(arctan + set45) * arrlen,
+  //     y2 + Math.sin(arctan + set45) * arrlen
+  //   );
 
-    context.moveTo(x2, y2);
-    context.lineTo(
-      x2 + Math.cos(arctan - set45) * arrlen,
-      y2 + Math.sin(arctan - set45) * arrlen
-    );
-  }
+  //   context.moveTo(x2, y2);
+  //   context.lineTo(
+  //     x2 + Math.cos(arctan - set45) * arrlen,
+  //     y2 + Math.sin(arctan - set45) * arrlen
+  //   );
+  // }
 
   // function search() {
   //   var value = document.getElementById("value").value.trim();
@@ -228,12 +229,12 @@ const Tree = () => {
   }
 
   function isVowel(char: string) {
-    if (char.length == 1) {
-      var vowels = new Array("a", "e", "i", "o", "u");
+    if (char.length === 1) {
+      var vowels = ["a", "e", "i", "o", "u"];
       var isVowel = false;
 
       for (let e in vowels) {
-        if (vowels[e] == char) {
+        if (vowels[e] === char) {
           isVowel = true;
         }
       }
@@ -247,12 +248,12 @@ const Tree = () => {
     let input: any = inputRef.current;
     var value = input.value.trim();
     if (!isChar) {
-      if (value == "") {
+      if (value === "") {
         // jAlert("no key entered");
       } else if (tree.search(value)) {
         //jAlert("key " + value + " is already in the tree");
       } else {
-        tree.insert(value);
+        tree.insert(+value);
         console.log(tree.getInorder(tree.root, t));
         if (t.length > 1) {
           let sorted = t.sort(compare);
@@ -262,7 +263,7 @@ const Tree = () => {
         draw();
       }
     } else {
-      if (value == "") {
+      if (value === "") {
         // jAlert("no key entered");
       } else if (tree.search(value.charCodeAt())) {
         //jAlert("key " + value + " is already in the tree");
@@ -275,7 +276,7 @@ const Tree = () => {
         });
         console.log(sorted);
         sorted.forEach((e) =>
-          console.log(tree.searchNode(e.value.charCodeAt()))
+          console.log({...tree.searchNode(e.value.charCodeAt()), element: e.value})
         );
         draw();
       }

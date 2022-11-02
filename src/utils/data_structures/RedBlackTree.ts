@@ -1,4 +1,6 @@
-// Constructor for BST
+type TreeNodeValue = string | number;
+
+// Binary search tree
 class BST {
   public root: any;
   public size: number;
@@ -7,86 +9,79 @@ class BST {
     this.root = null;
     this.size = 0;
   }
+
   // Returns true if the element is in the tree
-  search(e: any) {
-    let current = this.root; // Start from the root
-
-    while (current != null) {
-      if (e < current.element) {
+  search(value: TreeNodeValue) {
+    let current = this.root; 
+    while (current !== null) {
+      if (value < current.element) {
         current = current.left;
-      } else if (e > current.element) {
+      } else if (value > current.element) {
         current = current.right;
-      } // element matches current.element
-      else return true; // Element is found
+      } 
+      else return true; 
     }
-
     return false;
   }
 
-  searchNode(e: any) {
-    let current = this.root; // Start from the root
+  searchNode(value: TreeNodeValue) {
+    let current = this.root; 
 
     while (current != null) {
-      if (e < current.element) {
+      if (value < current.element) {
         current = current.left;
-      } else if (e > current.element) {
+      } else if (value > current.element) {
         current = current.right;
-      } // element matches current.element
-      else return current; // Element is found
+      }
+      else return current;
     }
-
-    return false;
+    return null;
   }
-  // Insert a new element e
-  insert(e: any) {
+
+  insert(value: TreeNodeValue) {
     if (this.root == null)
-      this.root = this.createNewNode(e); // Create a new root
+      this.root = this.createNewNode(value); 
     else {
       // Locate the parent node
       let parent = null;
       let current = this.root;
       while (current != null)
-        if (e < current.element) {
+        if (value < current.element) {
           parent = current;
           current = current.left;
-        } else if (e > current.element) {
+        } else if (value > current.element) {
           parent = current;
           current = current.right;
         } else return false; // Duplicate node not inserted
 
       // Create the new node and attach it to the parent node
-      if (e < parent.element) {
-        parent.left = this.createNewNode(e);
+      if (value < parent.element) {
+        parent.left = this.createNewNode(value);
       } else {
-        parent.right = this.createNewNode(e);
+        parent.right = this.createNewNode(value);
       }
     }
-
     this.size++;
-    return true; // Element inserted
+    return true; 
   }
-  createNewNode(e: any) {
-    return new TreeNode(e);
+  createNewNode(value: TreeNodeValue) {
+    return new TreeNode(value);
   }
-  /** Delete an element from the binary tree.
-   * Return true if the element is deleted successfully
-   * Return false if the element is not in the tree
-   */
-  remove(e: any) {
-    // Locate the node to be deleted and also locate its parent node
+
+  remove(value: TreeNodeValue) {
     let parent = null;
     let current = this.root;
     while (current != null) {
-      if (e < current.element) {
+      if (value < current.element) {
         parent = current;
         current = current.left;
-      } else if (e > current.element) {
+      } else if (value > current.element) {
         parent = current;
         current = current.right;
       } else break; // Element is in the tree pointed at by current
     }
 
-    if (current == null) return false; // Element is not in the tree
+    if (current == null) return false; 
 
     // Case 1: current has no left children
     if (current.left == null) {
@@ -94,7 +89,7 @@ class BST {
       if (parent == null) {
         this.root = current.right;
       } else {
-        if (e < parent.element) parent.left = current.right;
+        if (value < parent.element) parent.left = current.right;
         else parent.right = current.right;
       }
     } else {
@@ -113,48 +108,50 @@ class BST {
       current.element = rightMost.element;
 
       // Eliminate rightmost node
-      if (parentOfRightMost.right == rightMost)
+      if (parentOfRightMost.right === rightMost)
         parentOfRightMost.right = rightMost.left;
       // Special case: parentOfRightMost == current
       else parentOfRightMost.left = rightMost.left;
     }
 
     this.size--;
-    return true; // Element inserted
+    return true;
   }
-  /** Clear the tree
-   */
-  clear(e: any) {
+
+  clear() {
     this.root = null;
     this.size = 0;
   }
-  // Return true if the tree is empty
+
   isEmpty() {
     return this.root == null;
   }
-  // Return the size of the tree
+
   getSize() {
     return this.size;
   }
+
   // Returns a path from the root leading to the specified element
-  path(e: any) {
+  path(value: TreeNodeValue) {
     let list = [];
     let current = this.root; // Start from the root
 
     while (current != null) {
       list.push(current); // Add the node to the list
-      if (e < current.element) {
+      if (value < current.element) {
         current = current.left;
-      } else if (e > current.element) {
+      } else if (value > current.element) {
         current = current.right;
       } else break;
     }
 
     return list; // Return an array of nodes
   }
+
   getRoot() {
     return this.root;
   }
+
   getInorder(root: any, t: Array<object>): any {
     if (root != null) {
       t.push({ value: root.element, color: root.red });
@@ -163,6 +160,7 @@ class BST {
       return t;
     } else return "";
   }
+  
   getPreorder(root: any): any {
     if (root != null) {
       return (
@@ -187,39 +185,31 @@ class BST {
   }
 }
 
-// Constructor for Node
+
 class TreeNode {
-  private element: number | undefined;
+  private element: TreeNodeValue | undefined;
   private left: TreeNode | null;
   private right: TreeNode | null;
 
-  constructor(e?: number) {
+  constructor(e?: TreeNodeValue) {
     this.element = e;
     this.left = null;
     this.right = null;
   }
 }
 
-// Constructor for RBTree
 export class RBTree extends BST {
   static RBTree: BST;
-  constructor() {
-    super();
-    //  jAlert("RBTree called");
-    // BST.call(this);
+
+  createNewNode(value: TreeNodeValue): RBTreeNode {
+    return new RBTreeNode(value);
   }
-  // Override the createNewNode method
-  createNewNode(e: any): any {
-    //  jAlert("RBTree createNewNode");
-    return new RBTreeNode(e);
-  }
-  // Insert a new element e
-  insert(e: any) {
-    let successful = BST.prototype.insert.call(this, e);
-    //  jAlert("After insert, RBTree size is " + this.size);
+
+  insert(value: TreeNodeValue) {
+    let successful = BST.prototype.insert.call(this, value);
     if (!successful) return false; // e is already in the tree
     else {
-      this.ensureRBTree(e);
+      this.ensureRBTree(value);
     }
 
     return true; // e is inserted
@@ -235,11 +225,11 @@ export class RBTree extends BST {
     let u = path[i];
 
     // v is the parent of of u, if exists
-    let v = u == this.root ? null : path[i - 1];
+    let v = u === this.root ? null : path[i - 1];
 
     u.setRed(); // It is OK to set u red
 
-    if (u == this.root)
+    if (u === this.root)
       // If e is inserted as the this.root, set this.root black
       u.setBlack();
     else if (v.isRed()) this.fixDoubleRed(u, v, path, i); // Fix double red violation at u
@@ -253,27 +243,27 @@ export class RBTree extends BST {
   ) {
     // w is the grandparent of u
     let w = path[i - 2];
-    let parentOfw = w == this.root ? null : path[i - 3];
+    let parentOfw = w === this.root ? null : path[i - 3];
 
     // Get v's sibling named x
-    let x = w.left == v ? w.right : w.left;
+    let x = w.left === v ? w.right : w.left;
 
     if (x == null || x.isBlack()) {
       // Case 1: v's sibling x is black
-      if (w.left == v && v.left == u) {
+      if (w.left === v && v.left === u) {
         // Case 1.1: u < v < w, Restructure and recolor nodes
         this.restructureRecolor(u, v, w, w, parentOfw);
 
         w.left = v.right; // v.right is y3 in Figure 11.7
         v.right = w;
-      } else if (w.left == v && v.right == u) {
+      } else if (w.left === v && v.right === u) {
         // Case 1.2: v < u < w, Restructure and recolor nodes
         this.restructureRecolor(v, u, w, w, parentOfw);
         v.right = u.left;
         w.left = u.right;
         u.left = v;
         u.right = w;
-      } else if (w.right == v && v.right == u) {
+      } else if (w.right === v && v.right === u) {
         // Case 1.3: w < v < u, Restructure and recolor nodes
         this.restructureRecolor(w, v, u, w, parentOfw);
         w.right = v.left;
@@ -294,7 +284,7 @@ export class RBTree extends BST {
       w.left.setBlack();
       w.right.setBlack();
 
-      if (w == this.root) {
+      if (w === this.root) {
         w.setBlack();
       } else if (parentOfw.isRed()) {
         // Propagate along the path to fix new double red violation
@@ -313,7 +303,7 @@ export class RBTree extends BST {
     parentOfw: { left: any; right: any } | null
   ) {
     if (parentOfw == null) this.root = b;
-    else if (parentOfw.left == w) parentOfw.left = b;
+    else if (parentOfw.left === w) parentOfw.left = b;
     else parentOfw.right = b;
 
     b.setBlack(); // b becomes the this.root in the subtree
@@ -326,16 +316,16 @@ export class RBTree extends BST {
 
     // u is the last node in the path
     let u = path[i];
-    let parentOfu = u == this.root ? null : path[i - 1];
+    let parentOfu = u === this.root ? null : path[i - 1];
     let grandparentOfu =
-      parentOfu == null || parentOfu == this.root ? null : path[i - 2];
+      parentOfu == null || parentOfu === this.root ? null : path[i - 2];
     let childOfu = u.left == null ? u.right : u.left;
 
     // Delete node u. Connect childOfu with parentOfu
     this.connectNewParent(parentOfu, u, childOfu);
 
     // Recolor the nodes and fix double black if needed
-    if (childOfu == this.root || u.isRed())
+    if (childOfu === this.root || u.isRed())
       return; // Done if childOfu is this.root or if u is red
     else if (childOfu != null && childOfu.isRed())
       childOfu.setBlack(); // Set it black, done
@@ -358,12 +348,12 @@ export class RBTree extends BST {
     i: number
   ) {
     // Obtain y, y1, and y2
-    let y = parent.right == db ? parent.left : parent.right;
+    let y = parent.right === db ? parent.left : parent.right;
     let y1 = y.left;
     let y2 = y.right;
 
     if (y.isBlack() && y1 != null && y1.isRed()) {
-      if (parent.right == db) {
+      if (parent.right === db) {
         // Case 1.1: y is a left black sibling and y1 is red
         this.connectNewParent(grandparent, parent, y);
         this.recolor(parent, y, y1); // Adjust colors
@@ -383,7 +373,7 @@ export class RBTree extends BST {
         y1.right = y;
       }
     } else if (y.isBlack() && y2 != null && y2.isRed()) {
-      if (parent.right == db) {
+      if (parent.right === db) {
         // Case 1.2: y is a left black sibling and y2 is red
         this.connectNewParent(grandparent, parent, y2);
         this.recolor(parent, y2, y); // Adjust colors
@@ -406,7 +396,7 @@ export class RBTree extends BST {
       // Case 2: y is black and y's children are black or null
       y.setRed(); // Change y to red
       if (parent.isRed()) parent.setBlack(); // Done
-      else if (parent != this.root) {
+      else if (parent !== this.root) {
         // Propagate double black to the parent node
         // Fix new appearance of double black recursively
         db = parent;
@@ -416,7 +406,7 @@ export class RBTree extends BST {
       }
     } else {
       // y.isRed()
-      if (parent.right == db) {
+      if (parent.right === db) {
         // Case 3.1: y is a left red child of parent
         parent.left = y2;
         y.right = parent;
@@ -464,10 +454,10 @@ export class RBTree extends BST {
     },
     newParent: { setBlack: () => void }
   ) {
-    if (parent == this.root) {
+    if (parent === this.root) {
       this.root = newParent;
       if (this.root != null) newParent.setBlack();
-    } else if (grandparent.left == parent) grandparent.left = newParent;
+    } else if (grandparent.left === parent) grandparent.left = newParent;
     else grandparent.right = newParent;
   }
   delete(e: any) {
@@ -507,14 +497,13 @@ export class RBTree extends BST {
   }
 }
 
-// Constructor for Node
 class RBTreeNode extends TreeNode {
   private red: boolean;
   private blackHeight: number;
   static RBTreeNode: TreeNode;
   constructor(e: any) {
     super(e);
-    this.red = true; // Indicate node color
+    this.red = true; 
     this.blackHeight = 0;
   }
   isRed() {

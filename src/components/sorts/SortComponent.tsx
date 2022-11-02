@@ -48,10 +48,10 @@ const SortComponent = (sort: SortFunc) => {
 
     return (
       <>
-        <div className={styles.container}>
+        <main className={styles.container}>
           <Graph array={array} swaps={swappingElements} />
-        </div>
-        <span className={styles.status}>Steps: {steps}. Time taken {timeTaken}ms.</span>
+        </main>
+        <footer className={styles.status}>Steps: {steps}. Time taken {timeTaken}ms.</footer>
       </>
     );
   };
