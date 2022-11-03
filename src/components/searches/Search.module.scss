@@ -15,8 +15,14 @@
     &:hover {
       background-color: hsla(0, 0%, 100%, 0.138);
     }
-    &.active {
-      background-color: $active-clr;
+    &.orange {
+      background-color: orange;
+    }
+    &.red {
+      background-color: red;
+    }
+    &.green {
+      background-color: green;
       color: $secondary-clr;
       border-color: $active-clr;
       &:hover {

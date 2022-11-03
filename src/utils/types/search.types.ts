@@ -9,3 +9,9 @@ export type SearchType = {
 };
 
 export type OutletContextSearch = [string, string, number];
+
+export type HighlightedElements = {
+  orange?: {searchIn: number; searchFor: number};
+  red?: {searchIn: number; searchFor: number};
+  found?: number[];
+}

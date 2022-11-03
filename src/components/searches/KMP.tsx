@@ -4,13 +4,14 @@ import generateString from '../../utils/searches/generateString';
 import styles from './Search.module.scss';
 import { useOutletContext } from 'react-router-dom';
 import { OutletContextSearch } from '../../utils/types/search.types';
+import { HighlightedElements } from '../../utils/types/search.types';
 
 
 const KMP = () => {
   const [seatchIn, searchFor, variant]: OutletContextSearch = useOutletContext();
   const [array, setArray] = React.useState<string>('');
   const [isSearching, setIsSearching] = React.useState<boolean>(false);
-  const [active, setActive] = React.useState<number>(0);
+  const [active, setActive] = React.useState<HighlightedElements>({});
   const isLarge = useMemo(() => array.length > 30, [array.length]);
 
   useEffect(() => {
@@ -26,9 +27,9 @@ const KMP = () => {
     }
   }, [seatchIn, searchFor]);
 
-  const render = (index: number) => {
-    setActive(index);
-    return new Promise((resolve) => setTimeout(resolve, isLarge ? 300 : 1000));
+  const render = (elements: HighlightedElements) => {
+    setActive(elements);
+    return new Promise((resolve) => setTimeout(resolve, isLarge ? 300 : 500));
   };
 
   const startSearching = (): Promise<number> | undefined => {
@@ -47,11 +48,27 @@ const KMP = () => {
   };
 
   return (
-    <div className={`${styles['search-array']}  ${isLarge ? styles['large'] : ""}`}>
-      {array.split('').map((item, index) => (
-        <div key={index} className={`${index === active ? styles.active : ''}`}>{item}</div>
-      ))}
-    </div>
+    <>
+      <div className={`${styles['search-array']}  ${isLarge ? styles['large'] : ""}`}>
+        {array.split('').map((item, index) => (
+          <div key={index} className={`
+            ${active?.orange && active.orange?.searchIn === index && styles.orange}  
+            ${active?.red && active.red?.searchIn === index && styles.red}
+            ${active?.found && active.found.includes(index) && styles.green}
+          `}>{item}</div>
+        ))}
+      </div>
+      <div className={`${styles['search-array']}`}>
+        {searchFor.split('').map((item, index) => (
+          <div key={index} className={`
+            ${active?.orange && active.orange?.searchFor === index && styles.orange}
+            ${active?.red && active.red?.searchFor === index && styles.red}
+            ${active?.found && styles.green}
+          `}>{item}</div>
+        ))}
+      </div>
+    </>
+    
   )
 }
 

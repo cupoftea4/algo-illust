@@ -1,4 +1,5 @@
 type SearchArray = string | number[];
+type TableObjectType = {[key: string]: number};
 
 export const binarySearch = async (arr: SearchArray, target: number | string, render: Function): Promise<[number[] | null, number]> => {
   let start = 0;
@@ -33,72 +34,74 @@ export const binarySearch = async (arr: SearchArray, target: number | string, re
 
 export const kmpSearch = async (str: string, target: string, render: Function): Promise<[number | null, number]> => {
   const lps = getLps(target);
+  console.log(lps); 
   let i = 0;
   let j = 0;
   let steps = 0;
   while (i < str.length) {
     steps++;
-    await render(i);
     if (str[i] === target[j]) {
+      await render({red: {searchIn: i, searchFor: j}});
       i++;
       j++;
       if (j === target.length) {
-        return [i - j, steps];
+        const found = i - j;
+        await render({found: Array.from({length: target.length}, (_, index) => index + found)});
+        return [found, steps];
       }
     } else if (j > 0) {
+      await render({orange: {searchIn: i, searchFor: j}});
       j = lps[j - 1];
+      i -= j;
+      j =  0;
     } else {
+      await render({orange: {searchIn: i, searchFor: j}});
       i++;
     }
   }
   return [null, steps];
 }
 
+const buildBadMatchTable = (str: string) => {
+  const tableObj: TableObjectType = {}
+  const strLength = str.length
+  for (let i = 0; i < strLength - 1; i++) {
+    tableObj[str[i]] = Math.max(strLength - 1 - i, 1);
+    console.log(tableObj);
+    
+  }
+  if (tableObj[str[strLength - 1]] === undefined) {
+    tableObj[str[strLength - 1]] = strLength
+  }
+  return tableObj;
+}
+
 export const bmSearch = async (str: string, target: string, render: Function): Promise<[number | null, number]> => {
-  const badChar = getBadChar(target);
-  const goodSuffix = getGoodSuffix(target);
-  let i: number = 0;
-  let steps = 0;
-  while (i <= str.length - target.length) {
-    steps++;
-    await render(i);
-    let j: number = target.length - 1;
-    while (j >= 0 && target[j] === str[i + j]) {
-      j--;
-    }
-    if (j < 0) {
-      return [i, steps];
-    } else {
-      i += Math.max(goodSuffix[j], j - badChar[str[i + j].charCodeAt(0)]);
-    }
-  }
-  return [null, steps];
-}
+  const badMatchTable: TableObjectType = buildBadMatchTable(target);
 
-const getBadChar = (target: string): number[] => {
-  const badChar = new Array(256).fill(-1);
-  for (let i = 0; i < target.length; i++) {
-    badChar[target.charCodeAt(i)] = i;
-  }
-  return badChar;
-}
-
-const getGoodSuffix = (target: string): number[] => {
-  const goodSuffix = new Array(target.length).fill(target.length);
-  const lps = getLps(target);
-  for (let i = target.length - 1; i >= 0; i--) {
-    if (lps[i] === i + 1) {
-      for (let j = 0; j < target.length - 1 - i; j++) {
-        if (goodSuffix[j] === target.length) {
-          goodSuffix[j] = target.length - 1 - i;
-        }
+  let offset = 0;
+  const maxOffset = str.length - target.length;
+  const lastTargetIndex = target.length - 1;
+  while (offset <= maxOffset) {
+    let scanIndex = lastTargetIndex;
+    while (target[scanIndex] === str[scanIndex + offset]) {
+      await render({red: {searchIn: offset + scanIndex, searchFor: scanIndex}});
+      if (scanIndex === 0) {
+        const found = offset;
+        await render({found: Array.from({length: target.length}, (_, index) => index + found)});
+        return [found, 0]
       }
+      scanIndex--;
     }
+    const badMatchChar = str[offset + lastTargetIndex]
+    if (badMatchTable[badMatchChar as keyof TableObjectType]) {
+      offset += badMatchTable[badMatchChar];
+    } else {
+      offset += target.length;
+    }
+    await render({orange: {searchIn: offset, searchFor: scanIndex}});
   }
-  for (let i = 0; i < target.length - 1; i++) {
-    goodSuffix[target.length - 1 - lps[i]] = target.length - 1 - i;
-  }
-  return goodSuffix;
+  return [null, 0]
 }
 
 const getLps = (target: string): number[] => {
