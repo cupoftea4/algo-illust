@@ -1,3 +1,4 @@
+import generateRandomArray from "../randomArrays";
 import { DSArray, DSArrayElement, DSStats } from "../types/ds.types";
 import { DSClass } from "../types/ds.types";
 
@@ -6,7 +7,7 @@ const RANDOM_ARRAY_SIZE = 5;
 function testDS(array: DSArray, toFind: DSArrayElement, DSType: DSClass) {
   const ds = new DSType(array);
   const randDS = new DSType(
-    Array.from({ length: RANDOM_ARRAY_SIZE }, () => Math.floor(Math.random() * 100))
+    generateRandomArray(RANDOM_ARRAY_SIZE, 100)
   );
   return {
     length: ds.length,

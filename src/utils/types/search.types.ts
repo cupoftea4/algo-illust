@@ -8,4 +8,4 @@ export type SearchType = {
   name: string;
 };
 
-export type OutletContextSearch = [string, string];
+export type OutletContextSearch = [string, string, number];

@@ -18,11 +18,8 @@ const SortPage = () => {
   const [isSorting, setIsSorting] = useState<boolean>(false);
   const [variant, setVariant] = useState<number>(0);
 
-  const onLengthSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
+  const onLengthSubmit = async (length: number) => {
     if (!isSorting) {
-      const data = new FormData(event.currentTarget);
-      const length = parseInt(data.get("arrayLength")?.toString() || "0");
       setLoading(true);
       const array = await generateArray(length, variant);
       setLoading(false);

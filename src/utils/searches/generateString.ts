@@ -8,6 +8,7 @@ const getString = (text: string, varient: number) => {
     case 8:
       const pattern = /([a-zA-Z]{\d})|(\([a-zA-Z]*\){\d})/g;
       const matches = text.match(pattern);
+      console.log(matches);
       
       if (matches) {
         matches.forEach(match => {

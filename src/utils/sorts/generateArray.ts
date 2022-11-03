@@ -1,4 +1,5 @@
 import { findLastIndex } from "../findLastIndex";
+import generateRandomArray from "../randomArrays";
 
 // This functions are needed for my university. You can use just random numbers (by choosing "rand" for var)
 
@@ -16,12 +17,10 @@ const getCity = async () => {
 
 const generateArray = async (length: number, variant: number) => {
   console.log("Generating array...");
-  let array: number[] = Array.from({ length }, () =>
-    Math.floor(Math.random() * 100)
-  );
+  let array: number[] = generateRandomArray(length, 100);
   switch (variant) {
     case 0:
-      array = Array.from({ length }, () => Math.floor(Math.random() * 100));
+      array = generateRandomArray(length, 100);
       return array;
     case 1:
       array = Array.from(
@@ -68,17 +67,13 @@ const generateArray = async (length: number, variant: number) => {
       console.log("Sliced array: ", resultArray);
       return resultArray;
     case 10:
-      const secondArray = Array.from({ length }, () =>
-        Math.floor(Math.random() * 100)
-      );
+      const secondArray = generateRandomArray(length, 100)
       const result = array
         .filter((num) => num % 2 !== 0)
         .concat(secondArray.filter((num) => num % 2 === 0));
       return result;
     case 11:
-      let matrix_ = Array.from({ length: length }, () =>
-        Array.from({ length: length }, () => Math.floor(Math.random() * 100))
-      );
+      let matrix_ = Array.from({ length: length }, () => generateRandomArray(length, 100));
       return matrix_;
     case 12:
       array = Array.from(
@@ -91,12 +86,7 @@ const generateArray = async (length: number, variant: number) => {
       console.log("Array after max: ", arrayAfterMax);
       return arrayAfterMax;
     case 13:
-      array = Array.from(
-        { length },
-        () =>
-          Math.floor(Math.random() * 10) *
-          (Math.floor(Math.random() * 2) === 1 ? 1 : -1)
-      );
+      array = generateRandomArray(length, 10, true);
       const arrayWithoutMultiples = array.filter((item) => item % 3 !== 0);
       console.log("Array without multiples: ", arrayWithoutMultiples);
       const arrayWithPower2 = arrayWithoutMultiples.map((item) => Math.floor((item) * (item) * 100) / 100);
@@ -110,9 +100,7 @@ const generateArray = async (length: number, variant: number) => {
       console.log("Cities: ", cities);
       return cities;
     case 15:
-      const matrix = Array.from({ length: length }, () =>
-        Array.from({ length: length }, () => Math.floor(Math.random() * 100))
-      );
+      const matrix = Array.from({ length: length }, () => generateRandomArray(length, 100));
       console.log("Matrix: ", matrix);
       return matrix;
     case 16:

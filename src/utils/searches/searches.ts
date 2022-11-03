@@ -10,7 +10,8 @@ export const binarySearch = async (arr: SearchArray, target: number | string, re
     await render(mid);
     if (arr[mid] === target) {
       let cur = mid;
-      const result = [mid]
+      const result = [mid];
+      // find all occurences
       while (arr[--cur] === target) {
         result.unshift(cur);
         await render(cur);

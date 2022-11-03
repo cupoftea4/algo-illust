@@ -5,10 +5,9 @@ import styles from './Search.module.scss';
 import { useOutletContext } from 'react-router-dom';
 import { OutletContextSearch } from '../../utils/types/search.types';
 
-const VARIANT = 12;
 
 const KMP = () => {
-  const [seatchIn, searchFor]: OutletContextSearch = useOutletContext();
+  const [seatchIn, searchFor, variant]: OutletContextSearch = useOutletContext();
   const [array, setArray] = React.useState<string>('');
   const [isSearching, setIsSearching] = React.useState<boolean>(false);
   const [active, setActive] = React.useState<number>(0);
@@ -33,7 +32,7 @@ const KMP = () => {
   };
 
   const startSearching = (): Promise<number> | undefined => {
-    const genertedText = generateString(array, VARIANT);
+    const genertedText = generateString(array, variant);
     setArray(genertedText);
 
     setIsSearching(true);

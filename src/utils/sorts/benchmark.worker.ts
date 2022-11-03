@@ -1,3 +1,5 @@
+import generateRandomArray from "../randomArrays";
+
 const startSorting = () => {
   let STEPS = 0;
 
@@ -21,7 +23,7 @@ const startSorting = () => {
   onmessage = async (message) => {
     const data = message.data;
     console.log('Message received from main script', data);
-    const arr = Array.from({ length: data.length }, () => Math.floor(Math.random() * 100));
+    const arr = generateRandomArray(data.length, 100);
 
     data.sorts.forEach((sort: any) => {
       if (sort === 'all') {

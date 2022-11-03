@@ -26,16 +26,13 @@ const SortsTable = () => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const startSorting = async (event?: React.FormEvent<HTMLFormElement>) => {
-    event?.preventDefault();
+  const startSorting = async (length?: number) => {
     if (isSorting) {
       alert("Please wait for the current sorting to finish.");
       return;
     }
     setIsSorting(true);
-    const data = new FormData(event?.currentTarget);
-    const length = parseInt(data.get("arrayLength")?.toString() || INITIAL_LENGTH.toString());
-    setArrayLength(length);
+    setArrayLength(length || arrayLength);
     setStats([]);
     const instance = new WorkerBuilder(Worker as any);
     instance.onmessage = (message) => {
