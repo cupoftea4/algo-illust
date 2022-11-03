@@ -61,3 +61,6 @@ export type DSStats = {
   foundIndex: number | null;
   mergedArray: DSArray;
 };
+
+
+export type BRTreeArrayElement = {value: number | string; red: boolean};

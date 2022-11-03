@@ -22,7 +22,7 @@ body {
 main {
   flex: 1 1 auto;
   @include flex-center;
-  padding: 3rem 4rem;
+  padding: 0 4rem;
 }
 
 footer {
